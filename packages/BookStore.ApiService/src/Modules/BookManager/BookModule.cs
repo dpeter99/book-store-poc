@@ -8,6 +8,6 @@ public static class BookModule
     {
         // Placeholder for module configuration logic
 
-        builder.Services.AddSingleton<BookService>();
+        builder.Services.AddScoped<BookService>();
     }
 }

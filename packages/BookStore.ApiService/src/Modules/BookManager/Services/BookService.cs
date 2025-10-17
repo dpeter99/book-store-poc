@@ -1,34 +1,24 @@
+using BookStore.ApiService.Database;
 using BookStore.ApiService.Modules.BookManager.Model;
 
 namespace BookStore.ApiService.Modules.BookManager.Services;
 
-public class BookService
+public class BookService(AppDbContext dbContext)
 {
-    private List<Book> _books = [
-        new Book
-        {
-            Id = 1,
-            Title = "Sample Book 1",
-            Genre = "Fiction",
-            PublishedDate = DateTime.Now,
-            AuthorId = 1
-        },
-        new Book
-        {
-            Id = 2,
-            Title = "Sample Book 2",
-            Genre = "Non-Fiction",
-            PublishedDate = DateTime.Now,
-            AuthorId = 2
-        }
-    ];
-    
     public IEnumerable<Book> GetAll()
     {
-        return _books;
+        var books = dbContext.Books.ToList().Select(b => new Book()
+        {
+            Id = b.Id,
+            Title = b.Title,
+            Genre = b.Genre,
+            PublishedDate = b.PublishedDate,
+            AuthorId = b.AuthorId
+        }).ToList();
+        return books;
     }
     
-    Book GetById(int id)
+    public Book GetById(Guid id)
     {
         return new Book
         {
@@ -36,7 +26,22 @@ public class BookService
             Title = "Sample Book",
             Genre = "Fiction",
             PublishedDate = DateTime.Now,
-            AuthorId = 1
+            AuthorId = new Guid()
         };
+    }
+    
+    public void AddBook(Book book)
+    {
+        
+        // Logic to add book to the database
+        dbContext.Books.Add(new Database.Entities.Modules.Books.Book()
+        {
+            Id = book.Id,
+            Title = book.Title,
+            Genre = book.Genre,
+            PublishedDate = book.PublishedDate,
+            AuthorId = book.AuthorId
+        });
+        dbContext.SaveChanges();
     }
 }

@@ -1,3 +1,4 @@
+using BookStore.ApiService.Database;
 using BookStore.ApiService.Modules.BookManager;
 using Scalar.AspNetCore;
 
@@ -11,9 +12,17 @@ builder.Services.AddProblemDetails();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+builder.Services.AddDbContext<AppDbContext>();
+
 builder.AddBookModule();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.EnsureCreated();
+}
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();

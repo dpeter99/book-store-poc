@@ -1,7 +1,10 @@
-namespace BookStore.ApiService.Modules.BookManager.Model;
+using System.ComponentModel.DataAnnotations;
+
+namespace BookStore.ApiService.Database.Entities.Modules.Books;
 
 public class Book
 {
+    [Key]
     public Guid Id { get; set; }
     public string Title { get; set; }
     public string Genre { get; set; }

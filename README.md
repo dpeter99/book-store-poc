@@ -34,14 +34,25 @@ The project will have a simple React SPA as the frontend this is not in scope fo
 This is the rough list of requirements that the POC must demonstrate how to best do in c#
 
 # Libs
-- Aspire
-- ASP.NET Core
-- Entity Framework Core
-- Serilog (I just like it)
+## Orchestration
+### Aspire
+Manages what services need to run and how they connect
+
+## Web framework
+ASP.NET Core
+## Database
+Entity Framework Core
+## Logging
+Serilog (I just like it)
+
+## Mapping library
+- https://mapperly.riok.app/
+
+
 
 # To be decided
 - Background task processing library
 - Eventing library
 - Email sending library
 - User management library
-- Mapping library
+
