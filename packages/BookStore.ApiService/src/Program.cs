@@ -5,6 +5,7 @@ using BookStore.ApiService.Infrastructure.MuliTenant;
 using BookStore.ApiService.Modules;
 using BookStore.ApiService.Modules.BookManager;
 using BookStore.ApiService.MuliTenant;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -36,6 +37,15 @@ builder.Services.AddAuthentication()
         o => { }
     );
 
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+});
+
 builder.AddBookModule();
 
 var app = builder.Build();
@@ -54,10 +64,13 @@ app.UseExceptionHandler();
 
 app.UseMiddleware<TenantResolver>();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapOpenApi().AllowAnonymous();
+    app.MapScalarApiReference().AllowAnonymous();
 }
 
 app.MapDefaultEndpoints();

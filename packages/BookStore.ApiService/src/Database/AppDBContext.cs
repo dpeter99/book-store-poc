@@ -20,5 +20,9 @@ public class AppDbContext(
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Book>()
              .HasQueryFilter(a => a.Id == tenantService.TenantId);
+        
+        modelBuilder.Entity<User>()
+            .HasQueryFilter(u => u.Id == tenantService.TenantId);
+            
     }
 }

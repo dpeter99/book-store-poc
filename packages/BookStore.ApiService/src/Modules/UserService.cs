@@ -1,4 +1,5 @@
 using BookStore.ApiService.Database;
+using BookStore.ApiService.MuliTenant;
 using Microsoft.AspNetCore.Authentication;
 
 namespace BookStore.ApiService.Modules;
@@ -15,7 +16,7 @@ public interface IUserService
     User GetOrCreateUser(string userName);
 }
 
-public class UserService(AppDbContext dbContext) : IUserService
+public class UserService(AppDbContext dbContext, ICurrentTenantService tenantService) : IUserService
 {
     public User GetOrCreateUser(string userName)
     {
@@ -34,7 +35,8 @@ public class UserService(AppDbContext dbContext) : IUserService
         {
             Id = Guid.NewGuid(),
             Username = userName,
-            Roles = [] // Placeholder for roles
+            Roles = [],
+            TenantId = tenantService.TenantId
         };
 
         dbContext.Users.Add(newUser);

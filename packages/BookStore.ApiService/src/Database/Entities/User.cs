@@ -10,5 +10,6 @@ public class User
     
     public string[] Roles { get; set; } = null!;
     
+    public Guid? TenantId { get; set; }
     public Tenant? Tenant { get; set; }
 }
