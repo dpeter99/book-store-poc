@@ -13,6 +13,7 @@ public class Tenant
 public interface ITenantService
 {
     Guid? CurrentTenantId { get; }
+    Tenant? CurrentTenant { get; }
     
     public Task<bool> SetTenantByDomain(string domain);
     
@@ -26,7 +27,8 @@ public class TenantService(TenantDbContext db, ILogger<TenantService> logger): I
     private Tenant? _tenant;
     
     public Guid? CurrentTenantId => _tenant?.Id;
-    
+    public Tenant? CurrentTenant => _tenant;
+
 
     public async Task<bool> SetTenantByDomain(string domain)
     {

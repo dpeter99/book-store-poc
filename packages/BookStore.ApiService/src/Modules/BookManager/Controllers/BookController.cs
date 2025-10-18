@@ -9,8 +9,8 @@ namespace BookStore.ApiService.Modules.BookManager.Controllers;
 
 [ApiController]
 [Route("api/book", Name = "Books")]
-[Authorize(Roles = "admin")]
-public class BookController(BookService bookService) : Controller
+[Authorize(Policy = "User")]
+public class BookController(IBookService bookService) : Controller
 {
     
     [HttpGet]

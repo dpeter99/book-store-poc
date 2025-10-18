@@ -1,6 +1,8 @@
 using BookStore.ApiService.Database;
 using BookStore.ApiService.Database.Entities;
 using BookStore.ApiService.Infrastructure.Auth;
+using BookStore.ApiService.Infrastructure.MuliTenant;
+using BookStore.ApiService.Infrastructure.Policies;
 using BookStore.ApiService.Modules;
 using BookStore.ApiService.Modules.BookManager;
 using BookStore.ApiService.MuliTenant;
@@ -42,8 +44,16 @@ builder.Services.AddAuthorization(options =>
         .RequireAuthenticatedUser()
         .Build();
     
+    options.AddPolicy("User", policy => 
+        policy
+            .RequireAuthenticatedUser()
+            .AddRequirements([new TenantAccessAuthorizationRequirement()])
+        );
+    
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
 });
+builder.Services.AddScoped<IAuthorizationHandler, TenantAccessAuthorizationRequirementHandler>();
+
 
 builder.AddBookModule();
 

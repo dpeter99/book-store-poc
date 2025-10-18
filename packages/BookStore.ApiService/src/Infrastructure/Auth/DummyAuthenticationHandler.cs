@@ -56,7 +56,7 @@ public sealed class DummyAuthenticationHandler(
         if(user is null)
             return AuthenticateResult.Fail("User not found");
 
-        Logger.LogInformation("Authenticate User Id: {id}", user.Id);
+        Logger.LogInformation("Authenticated User is Id: {id}", user.Id);
         
         List<Claim> claims = [
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),

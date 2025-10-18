@@ -6,12 +6,15 @@ using Tenant = BookStore.ApiService.Database.Entities.Tenant;
 
 namespace BookStore.ApiService.Database;
 
-public class AppDbContext(
-    DbContextOptions<AppDbContext> options,
-    ITenantService tenantService
-    ) : DbContext(options)
+public class AppDbContext : DbContext
 {
-    public Guid? CurrentTenantId { get; set; } = tenantService.CurrentTenantId;
+    public Guid? CurrentTenantId { get; set; }
+    
+    public AppDbContext(DbContextOptions<AppDbContext> options,
+        ITenantService tenantService) : base(options)
+    {
+        CurrentTenantId = tenantService.CurrentTenantId;
+    }
     
     
     public DbSet<Tenant> Tenants { get; set; }
@@ -23,10 +26,16 @@ public class AppDbContext(
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Book>()
-             .HasQueryFilter(a => a.Id == CurrentTenantId);
+             .HasQueryFilter(a => a.TenantId == CurrentTenantId);
         
         modelBuilder.Entity<User>()
-            .HasQueryFilter(u => u.Id == CurrentTenantId);
-            
+            .HasQueryFilter(u => u.TenantId == CurrentTenantId);
+        
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.EnableSensitiveDataLogging();
     }
 }

@@ -1,5 +1,6 @@
 using BookStore.ApiService.Database;
 using BookStore.ApiService.Modules.BookManager.Model;
+using BookStore.ApiService.MuliTenant;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.ApiService.Modules.BookManager.Services;
@@ -11,7 +12,7 @@ public interface IBookService
     Task AddBook(Book book);
 }
 
-public class BookService(AppDbContext dbContext) : IBookService
+public class BookService(AppDbContext dbContext, ITenantService tenantService) : IBookService
 {
     public async Task<IEnumerable<Book>> GetAll()
     {
@@ -56,7 +57,8 @@ public class BookService(AppDbContext dbContext) : IBookService
             Title = book.Title,
             Genre = book.Genre,
             PublishedDate = book.PublishedDate,
-            AuthorId = book.AuthorId
+            AuthorId = book.AuthorId,
+            TenantId = tenantService.CurrentTenantId ?? Guid.Empty //TODO figure out a better way to do this
         });
         await dbContext.SaveChangesAsync();
     }
