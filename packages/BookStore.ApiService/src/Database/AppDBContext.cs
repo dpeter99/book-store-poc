@@ -1,18 +1,20 @@
 using BookStore.ApiService.Database.Entities.Modules.Books;
+using BookStore.ApiService.MuliTenant;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.ApiService.Database;
 
-public class AppDbContext : DbContext
+public class AppDbContext(
+    DbContextOptions options,
+    ICurrentTenantService tenantService
+    ) : DbContext(options)
 {
     public DbSet<Book> Books { get; set; }
 
-    public AppDbContext(DbContextOptions options) : base(options)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Book>()
+             .HasQueryFilter(a => a.Id == tenantService.TenantId);
     }
 }

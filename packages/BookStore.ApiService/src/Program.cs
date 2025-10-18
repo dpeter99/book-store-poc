@@ -1,5 +1,7 @@
 using BookStore.ApiService.Database;
+using BookStore.ApiService.Database.Entities;
 using BookStore.ApiService.Modules.BookManager;
+using BookStore.ApiService.MuliTenant;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -13,7 +15,12 @@ builder.Services.AddProblemDetails();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-builder.AddNpgsqlDbContext<AppDbContext>(connectionName: "bookdb");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("bookdb")));
+
+builder.EnrichNpgsqlDbContext<AppDbContext>();
+
+builder.Services.AddScoped<ICurrentTenantService, CurrentTenantServiceImpl>();
 
 builder.AddBookModule();
 
@@ -23,13 +30,15 @@ if (app.Environment.IsDevelopment())
 {
     using (var scope = app.Services.CreateScope())
     {
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        dbContext.Database.Migrate();
+        //var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        //dbContext.Database.Migrate();
     }   
 }
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
+
+app.UseMiddleware<TenantResolver>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -41,8 +50,3 @@ app.MapDefaultEndpoints();
 app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
