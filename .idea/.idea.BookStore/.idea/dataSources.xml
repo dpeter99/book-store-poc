@@ -16,12 +16,5 @@
         </library>
       </libraries>
     </data-source>
-    <data-source source="LOCAL" name="postgresql" uuid="6826d3e0-d827-4411-80e8-9fbee17c2af3">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:35341/?password=%21jjN-%28%7D-6rbqs%295a8q98zG&amp;user=postgres</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
   </component>
 </project>

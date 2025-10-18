@@ -4,7 +4,6 @@ using Hangfire;
 using Hangfire.PostgreSql;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>();
 
 builder.Services.AddHangfire(config =>
 {
