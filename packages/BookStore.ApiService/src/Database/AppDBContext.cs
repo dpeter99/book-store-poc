@@ -7,9 +7,12 @@ public class AppDbContext : DbContext
 {
     public DbSet<Book> Books { get; set; }
 
+    public AppDbContext(DbContextOptions options) : base(options)
+    {
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-        optionsBuilder.UseSqlite("Filename=book.db"); ;
     }
 }

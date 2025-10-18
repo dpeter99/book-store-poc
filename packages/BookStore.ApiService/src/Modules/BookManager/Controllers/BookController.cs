@@ -1,3 +1,4 @@
+using BookStore.ApiService.Modules.BookManager.DTO;
 using BookStore.ApiService.Modules.BookManager.Model;
 using BookStore.ApiService.Modules.BookManager.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,23 +18,28 @@ public class BookController(BookService bookService) : Controller
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetBookById(int id)
+    public IActionResult GetBookById(Guid id)
     {
-        // Placeholder for getting a book by ID logic
-        return Ok($"Book{id}");
+        // Placeholder for getting a book by id logic
+        var book = bookService.GetById(id);
+        if (book == null)
+        {
+            return NotFound();
+        }
+        return Ok(book);
     }
 
     [HttpPost]
-    public IActionResult AddBook([FromBody] object book)
+    public IActionResult AddBook([FromBody] CreateBookDTO book)
     {
         // Placeholder for adding a new book logic
         bookService.AddBook(new Book()
         {
             Id = Guid.NewGuid(),
-            Title = "New Book",
-            Genre = "Genre",
-            PublishedDate = DateTime.Now,
-            AuthorId = Guid.NewGuid()
+            Title = book.Title,
+            Genre = book.Genre,
+            PublishedDate = book.PublishedDate,
+            AuthorId = book.AuthorId
         });
         
         return CreatedAtAction(nameof(GetBookById), new { id = 1 }, book);

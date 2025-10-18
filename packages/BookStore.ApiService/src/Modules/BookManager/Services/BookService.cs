@@ -18,15 +18,20 @@ public class BookService(AppDbContext dbContext)
         return books;
     }
     
-    public Book GetById(Guid id)
+    public Book? GetById(Guid id)
     {
-        return new Book
+        var bookEntity = dbContext.Books.Find(id);
+        if (bookEntity == null)
         {
-            Id = id,
-            Title = "Sample Book",
-            Genre = "Fiction",
-            PublishedDate = DateTime.Now,
-            AuthorId = new Guid()
+            return null;
+        }
+        return new Book()
+        {
+            Id = bookEntity.Id,
+            Title = bookEntity.Title,
+            Genre = bookEntity.Genre,
+            PublishedDate = bookEntity.PublishedDate,
+            AuthorId = bookEntity.AuthorId
         };
     }
     
