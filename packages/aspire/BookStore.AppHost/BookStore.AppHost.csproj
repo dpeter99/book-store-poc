@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\BookStore.ApiService\BookStore.ApiService.csproj" />
+      <ProjectReference Include="..\..\BookStore.OptimizationRunner\BookStore.OptimizationRunner.csproj" />
     </ItemGroup>
 
 </Project>

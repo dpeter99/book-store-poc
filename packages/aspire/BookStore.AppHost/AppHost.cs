@@ -10,5 +10,8 @@ var apiService = builder.AddProject<Projects.BookStore_ApiService>("apiservice")
     .WithHttpHealthCheck("/health")
     .WithReference(bookdb);
 
+var worker = builder.AddProject<Projects.BookStore_OptimizationRunner>("optimizer")
+    .WithReplicas(2)
+    .WithReference(bookdb);
 
 builder.Build().Run();

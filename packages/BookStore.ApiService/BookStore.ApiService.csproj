@@ -10,12 +10,15 @@
 
     <ItemGroup>
         <ProjectReference Include="..\aspire\BookStore.ServiceDefaults\BookStore.ServiceDefaults.csproj" />
+        <ProjectReference Include="..\BookStore.JobContracts\BookStore.JobContracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Aspire.Npgsql" Version="9.5.1" />
         <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.5.1" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9"/>
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.21" />
+        <PackageReference Include="Hangfire.PostgreSql" Version="1.20.12" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
           <PrivateAssets>all</PrivateAssets>

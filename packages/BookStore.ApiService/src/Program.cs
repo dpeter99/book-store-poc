@@ -6,6 +6,9 @@ using BookStore.ApiService.Infrastructure.Policies;
 using BookStore.ApiService.Modules;
 using BookStore.ApiService.Modules.BookManager;
 using BookStore.ApiService.MuliTenant;
+using BookStore.JobContracts.Contracts;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -55,6 +58,21 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<IAuthorizationHandler, TenantAccessAuthorizationRequirementHandler>();
 
 
+builder.Services.AddHangfire(config =>
+{
+    config.UsePostgreSqlStorage(c =>
+    {
+        c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("bookdb"));
+    });
+});
+
+builder.Services.AddHangfireServer(c =>
+{
+    c.Queues = ["local"];
+});
+
+
+
 builder.AddBookModule();
 
 var app = builder.Build();
@@ -65,6 +83,9 @@ if (app.Environment.IsDevelopment())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         dbContext.Database.Migrate();
+        
+        var scheduler = scope.ServiceProvider.GetRequiredService<IBackgroundJobClient>();
+        scheduler.Enqueue<IOptimizationRunner>((r)=> r.Run(new("Opt task")));
     }   
 }
 
@@ -75,6 +96,8 @@ app.UseMiddleware<TenantResolverMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHangfireDashboard();
 
 if (app.Environment.IsDevelopment())
 {
