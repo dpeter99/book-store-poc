@@ -7,11 +7,11 @@ public class TenantResolver(RequestDelegate next, ILogger<TenantResolver> logger
     public async Task InvokeAsync(HttpContext context, ICurrentTenantService tenantService)
     {
         // Logic to resolve tenant from the request
-        var tenantId = context.Request.Headers["X-Tenant-ID"].FirstOrDefault();
-        if (!string.IsNullOrEmpty(tenantId))
+        var tenantDomain = context.Request.Host.Host.Split('.')[0];
+        if (!string.IsNullOrEmpty(tenantDomain))
         {
-            logger.LogInformation($"TenantId: {tenantId}");
-            await tenantService.SetTenantId(new  Guid(tenantId));
+            logger.LogInformation($"Domain is: {tenantDomain}");
+            await tenantService.SetTenantByDomain(tenantDomain);
         }
         
         await next(context);

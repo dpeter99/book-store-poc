@@ -1,12 +1,14 @@
 using BookStore.ApiService.Modules.BookManager.DTO;
 using BookStore.ApiService.Modules.BookManager.Model;
 using BookStore.ApiService.Modules.BookManager.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.ApiService.Modules.BookManager.Controllers;
 
 [ApiController]
 [Route("api/book", Name = "Books")]
+[Authorize(Roles = "admin")]
 public class BookController(BookService bookService) : Controller
 {
     
@@ -20,6 +22,8 @@ public class BookController(BookService bookService) : Controller
     [HttpGet("{id}")]
     public IActionResult GetBookById(Guid id)
     {
+        
+        
         // Placeholder for getting a book by id logic
         var book = bookService.GetById(id);
         if (book == null)

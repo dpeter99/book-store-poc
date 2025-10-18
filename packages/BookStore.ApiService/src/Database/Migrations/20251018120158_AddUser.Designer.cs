@@ -3,6 +3,7 @@ using System;
 using BookStore.ApiService.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookStore.ApiService.src.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251018120158_AddUser")]
+    partial class AddUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,25 +50,6 @@ namespace BookStore.ApiService.src.Database.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("BookStore.ApiService.Database.Entities.Tenant", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Domain")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tenants");
-                });
-
             modelBuilder.Entity("BookStore.ApiService.Database.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -76,27 +60,13 @@ namespace BookStore.ApiService.src.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantId");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("BookStore.ApiService.Database.Entities.User", b =>
-                {
-                    b.HasOne("BookStore.ApiService.Database.Entities.Tenant", "Tenant")
-                        .WithMany()
-                        .HasForeignKey("TenantId");
-
-                    b.Navigation("Tenant");
                 });
 #pragma warning restore 612, 618
         }

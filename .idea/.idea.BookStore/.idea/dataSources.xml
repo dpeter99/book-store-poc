@@ -16,11 +16,11 @@
         </library>
       </libraries>
     </data-source>
-    <data-source source="LOCAL" name="postgresql" uuid="eb2734a2-ed6d-49c9-be55-985eb55aa77a">
+    <data-source source="LOCAL" name="postgresql" uuid="7a49e587-4d7b-443e-a039-3199a68f457a">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:42455/?password=%21jjN-%28%7D-6rbqs%295a8q98zG&amp;user=postgres</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:34465/?password=%21jjN-%28%7D-6rbqs%295a8q98zG&amp;user=postgres</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

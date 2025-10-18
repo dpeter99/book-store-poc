@@ -1,3 +1,4 @@
+using BookStore.ApiService.Database.Entities;
 using BookStore.ApiService.Database.Entities.Modules.Books;
 using BookStore.ApiService.MuliTenant;
 using Microsoft.EntityFrameworkCore;
@@ -5,10 +6,13 @@ using Microsoft.EntityFrameworkCore;
 namespace BookStore.ApiService.Database;
 
 public class AppDbContext(
-    DbContextOptions options,
+    DbContextOptions<AppDbContext> options,
     ICurrentTenantService tenantService
     ) : DbContext(options)
 {
+    public DbSet<Tenant> Tenants { get; set; }
+    public DbSet<User> Users { get; set; }
+    
     public DbSet<Book> Books { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

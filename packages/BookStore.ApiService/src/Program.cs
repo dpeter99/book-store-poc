@@ -1,5 +1,8 @@
 using BookStore.ApiService.Database;
 using BookStore.ApiService.Database.Entities;
+using BookStore.ApiService.Infrastructure.Auth;
+using BookStore.ApiService.Infrastructure.MuliTenant;
+using BookStore.ApiService.Modules;
 using BookStore.ApiService.Modules.BookManager;
 using BookStore.ApiService.MuliTenant;
 using Microsoft.EntityFrameworkCore;
@@ -17,10 +20,21 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("bookdb")));
-
 builder.EnrichNpgsqlDbContext<AppDbContext>();
 
+builder.Services.AddDbContext<TenantDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("bookdb")));
+builder.EnrichNpgsqlDbContext<TenantDbContext>();
+
+builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<ICurrentTenantService, CurrentTenantServiceImpl>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddAuthentication()
+    .AddScheme<DummyAuthenticationSchemeOptions, DummyAuthenticationHandler>(
+        DummyAuthenticationHandler.AuthenticationScheme,
+        o => { }
+    );
 
 builder.AddBookModule();
 
@@ -30,8 +44,8 @@ if (app.Environment.IsDevelopment())
 {
     using (var scope = app.Services.CreateScope())
     {
-        //var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        //dbContext.Database.Migrate();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        dbContext.Database.Migrate();
     }   
 }
 
