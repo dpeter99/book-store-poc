@@ -9,16 +9,18 @@ public class User
     public Guid Id { get; set; }
     public string Username { get; set; } = null!;
     public string[] Roles { get; set; } = null!;
+    
+    public Guid? TenantId { get; set; }
 }
 
 public interface IUserService
 {
-    User GetOrCreateUser(string userName);
+    User? GetUserByName(string userName);
 }
 
-public class UserService(AppDbContext dbContext, ICurrentTenantService tenantService) : IUserService
+public class UserService(AppDbContext dbContext) : IUserService
 {
-    public User GetOrCreateUser(string userName)
+    public User? GetUserByName(string userName)
     {
         var userEntity = dbContext.Users.FirstOrDefault(u=>u.Username == userName);
         if (userEntity != null)
@@ -28,25 +30,10 @@ public class UserService(AppDbContext dbContext, ICurrentTenantService tenantSer
                 Id = userEntity.Id,
                 Username = userEntity.Username,
                 Roles = userEntity.Roles,
+                TenantId = userEntity.TenantId
             };
         }
 
-        var newUser = new Database.Entities.User
-        {
-            Id = Guid.NewGuid(),
-            Username = userName,
-            Roles = [],
-            TenantId = tenantService.TenantId
-        };
-
-        dbContext.Users.Add(newUser);
-        dbContext.SaveChanges();
-
-        return new User
-        {
-            Id = newUser.Id,
-            Username = newUser.Username,
-            Roles = newUser.Roles,
-        };
+        return null;
     }
 }

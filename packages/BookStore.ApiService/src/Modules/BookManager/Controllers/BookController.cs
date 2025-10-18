@@ -2,6 +2,7 @@ using BookStore.ApiService.Modules.BookManager.DTO;
 using BookStore.ApiService.Modules.BookManager.Model;
 using BookStore.ApiService.Modules.BookManager.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.ApiService.Modules.BookManager.Controllers;
@@ -13,31 +14,33 @@ public class BookController(BookService bookService) : Controller
 {
     
     [HttpGet]
-    public IActionResult GetBooks()
+    public async Task<Ok<IEnumerable<BookDTO>>> GetBooks()
     {
         // Placeholder for getting books logic
-        return Ok(bookService.GetAll());
+        var books = (await bookService.GetAll())
+            .Select(BookDTO.Create);
+        
+        return TypedResults.Ok(books);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetBookById(Guid id)
+    public async Task<Results<Ok<BookDTO>,NotFound>> GetBookById(Guid id)
     {
-        
-        
         // Placeholder for getting a book by id logic
-        var book = bookService.GetById(id);
+        var book = await bookService.GetById(id);
         if (book == null)
         {
-            return NotFound();
+            return TypedResults.NotFound();
         }
-        return Ok(book);
+
+        return TypedResults.Ok(BookDTO.Create(book));
     }
 
     [HttpPost]
-    public IActionResult AddBook([FromBody] CreateBookDTO book)
+    public async Task<Created> AddBook([FromBody] CreateBookDTO book)
     {
         // Placeholder for adding a new book logic
-        bookService.AddBook(new Book()
+        await bookService.AddBook(new Book()
         {
             Id = Guid.NewGuid(),
             Title = book.Title,
@@ -45,7 +48,7 @@ public class BookController(BookService bookService) : Controller
             PublishedDate = book.PublishedDate,
             AuthorId = book.AuthorId
         });
-        
-        return CreatedAtAction(nameof(GetBookById), new { id = 1 }, book);
+
+        return TypedResults.Created();
     }
 }

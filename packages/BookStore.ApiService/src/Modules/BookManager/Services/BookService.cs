@@ -1,26 +1,37 @@
 using BookStore.ApiService.Database;
 using BookStore.ApiService.Modules.BookManager.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.ApiService.Modules.BookManager.Services;
 
-public class BookService(AppDbContext dbContext)
+public interface IBookService
 {
-    public IEnumerable<Book> GetAll()
+    Task<IEnumerable<Book>> GetAll();
+    Task<Book?> GetById(Guid id);
+    Task AddBook(Book book);
+}
+
+public class BookService(AppDbContext dbContext) : IBookService
+{
+    public async Task<IEnumerable<Book>> GetAll()
     {
-        var books = dbContext.Books.ToList().Select(b => new Book()
-        {
-            Id = b.Id,
-            Title = b.Title,
-            Genre = b.Genre,
-            PublishedDate = b.PublishedDate,
-            AuthorId = b.AuthorId
-        }).ToList();
+        var books = await dbContext.Books
+            .Select(b => new Book()
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Genre = b.Genre,
+                    PublishedDate = b.PublishedDate,
+                    AuthorId = b.AuthorId
+                }
+            )
+            .ToListAsync();
         return books;
     }
     
-    public Book? GetById(Guid id)
+    public async Task<Book?> GetById(Guid id)
     {
-        var bookEntity = dbContext.Books.Find(id);
+        var bookEntity = await dbContext.Books.FirstOrDefaultAsync(b => b.Id == id);
         if (bookEntity == null)
         {
             return null;
@@ -35,7 +46,7 @@ public class BookService(AppDbContext dbContext)
         };
     }
     
-    public void AddBook(Book book)
+    public async Task AddBook(Book book)
     {
         
         // Logic to add book to the database
@@ -47,6 +58,6 @@ public class BookService(AppDbContext dbContext)
             PublishedDate = book.PublishedDate,
             AuthorId = book.AuthorId
         });
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
     }
 }

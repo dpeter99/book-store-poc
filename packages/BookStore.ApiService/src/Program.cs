@@ -1,7 +1,6 @@
 using BookStore.ApiService.Database;
 using BookStore.ApiService.Database.Entities;
 using BookStore.ApiService.Infrastructure.Auth;
-using BookStore.ApiService.Infrastructure.MuliTenant;
 using BookStore.ApiService.Modules;
 using BookStore.ApiService.Modules.BookManager;
 using BookStore.ApiService.MuliTenant;
@@ -28,7 +27,7 @@ builder.Services.AddDbContext<TenantDbContext>(options =>
 builder.EnrichNpgsqlDbContext<TenantDbContext>();
 
 builder.Services.AddScoped<ITenantService, TenantService>();
-builder.Services.AddScoped<ICurrentTenantService, CurrentTenantServiceImpl>();
+builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddAuthentication()
@@ -62,7 +61,7 @@ if (app.Environment.IsDevelopment())
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
 
-app.UseMiddleware<TenantResolver>();
+app.UseMiddleware<TenantResolverMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

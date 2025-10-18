@@ -50,14 +50,24 @@ public sealed class DummyAuthenticationHandler(
         if(loginValue.userid is null || loginValue.password is null)
             return AuthenticateResult.Fail("Invalid Authorization Header");
         
-        var user = userService.GetOrCreateUser(loginValue.userid);
+        Logger.LogInformation("Authenticate User: {loginValue}", loginValue);
+        
+        var user = userService.GetUserByName(loginValue.userid);
+        if(user is null)
+            return AuthenticateResult.Fail("User not found");
 
+        Logger.LogInformation("Authenticate User Id: {id}", user.Id);
+        
         List<Claim> claims = [
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Username),
         ];
         
         claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r)));
+        
+        var userTenantId = user.TenantId;
+        if (userTenantId is not null)
+            claims.Add(new Claim(Claims.TenantId, userTenantId.ToString()!));
         
         return AuthenticateResult.Success(
             new AuthenticationTicket(
@@ -71,11 +81,9 @@ public sealed class DummyAuthenticationHandler(
     
     private static (string? userid, string? password) DecodeUserIdAndPassword(string encodedAuth)
     {
-        var separator = encodedAuth.IndexOf(':');
-        if (separator == -1)
-            return (null, null);
-
         var parts = encodedAuth.Split(':');
+        if (parts.Length <= 1)
+            return (null, null);
         
         return (parts[0], parts[1]);
     }
