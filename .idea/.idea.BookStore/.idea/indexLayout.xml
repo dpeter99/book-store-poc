@@ -2,7 +2,14 @@
 <project version="4">
   <component name="UserContentModel">
     <attachedFolders />
-    <explicitIncludes />
+    <explicitIncludes>
+      <Path>.editorconfig</Path>
+      <Path>.gitignore</Path>
+      <Path>Considered.md</Path>
+      <Path>README.md</Path>
+      <Path>Solution.md</Path>
+      <Path>TODO.md</Path>
+    </explicitIncludes>
     <explicitExcludes />
   </component>
 </project>
