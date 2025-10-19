@@ -1,3 +1,6 @@
+using Asp.Versioning;
+using Asp.Versioning.Routing;
+using BookStore.ApiService;
 using BookStore.ApiService.Database;
 using BookStore.ApiService.Database.Entities;
 using BookStore.ApiService.Infrastructure;
@@ -24,8 +27,15 @@ builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
+
+builder.Services.AddVersionedOpenApi([
+	("internal", new ApiVersion(1)),
+	("internal", new ApiVersion(2)),
+	("public", new ApiVersion(1))
+]);
+
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("bookdb")));
@@ -35,7 +45,6 @@ builder.Services.AddDbContext<TenantDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("bookdb")));
 builder.EnrichNpgsqlDbContext<TenantDbContext>();
 
-builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
@@ -71,11 +80,10 @@ builder.Services.AddHangfire((sp,config) =>
         ) 
     );
 
-builder.Services.AddHangfireServer(c =>
-{
-    c.Queues = ["local"];
-});
+builder.Services.AddHangfireServer(c => { c.Queues = ["local"]; });
 
+builder.Services.AddOpenTelemetry()
+	.WithTracing(c => c.AddProcessor(new HangfirePostgresTraceFilteringProcessor()));
 
 
 builder.AddBookModule();
@@ -107,7 +115,11 @@ app.UseHangfireDashboard();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi().AllowAnonymous();
-    app.MapScalarApiReference().AllowAnonymous();
+    app.MapScalarApiReference(c =>
+	    {
+		    c.AddDocuments(["internal-v1","internal-v2","public-v1"]);
+	    })
+	    .AllowAnonymous();
 }
 
 app.MapDefaultEndpoints();

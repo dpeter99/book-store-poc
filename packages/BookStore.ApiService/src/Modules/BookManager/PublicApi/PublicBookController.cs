@@ -1,0 +1,45 @@
+using Asp.Versioning;
+using BookStore.ApiService.Modules.BookManager.DTO;
+using BookStore.ApiService.Modules.BookManager.Model;
+using BookStore.ApiService.Modules.BookManager.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BookStore.ApiService.Modules.BookManager.PublicApi;
+
+[ApiController]
+[ApiVersion("1")]
+[EndpointGroupName("public")]
+[Route("api/v{version:apiVersion}/book")]
+[Authorize(Policy = "User")]
+public class BookController(IBookService bookService) : Controller
+{
+    
+	[HttpGet]
+	[ApiVersion("2")]
+	[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BookDTO>))]
+	public async Task<Ok<IEnumerable<BookDTO>>> GetBooks()
+	{
+		// Placeholder for getting books logic
+		var books = (await bookService.GetAll())
+			.Select(BookDTO.Create);
+        
+		return TypedResults.Ok(books);
+	}
+
+	[HttpGet("{id}")]
+	[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookDTO))]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
+	public async Task<Results<Ok<BookDTO>,NotFound>> GetBookById(Guid id)
+	{
+		// Placeholder for getting a book by id logic
+		var book = await bookService.GetById(id);
+		if (book == null)
+		{
+			return TypedResults.NotFound();
+		}
+
+		return TypedResults.Ok(BookDTO.Create(book));
+	}
+}

@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using BookStore.ApiService.Modules.BookManager.DTO;
 using BookStore.ApiService.Modules.BookManager.Model;
 using BookStore.ApiService.Modules.BookManager.Services;
@@ -8,13 +9,17 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookStore.ApiService.Modules.BookManager.Controllers;
 
 [ApiController]
-[Route("api/book", Name = "Books")]
+[Route("api/v{version:apiVersion}/book", Name = "Books")]
 [Authorize(Policy = "User")]
+[ApiVersion("1")]
+[EndpointGroupName("internal")]
 public class BookController(IBookService bookService) : Controller
 {
     
     [HttpGet]
     [EndpointName("get-books")]
+    [ApiVersion("2")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BookDTO>))]
     public async Task<Ok<IEnumerable<BookDTO>>> GetBooks()
     {
         // Placeholder for getting books logic
