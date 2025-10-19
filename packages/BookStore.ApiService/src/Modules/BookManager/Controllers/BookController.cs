@@ -14,6 +14,7 @@ public class BookController(IBookService bookService) : Controller
 {
     
     [HttpGet]
+    [EndpointName("get-books")]
     public async Task<Ok<IEnumerable<BookDTO>>> GetBooks()
     {
         // Placeholder for getting books logic
@@ -24,6 +25,8 @@ public class BookController(IBookService bookService) : Controller
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<Results<Ok<BookDTO>,NotFound>> GetBookById(Guid id)
     {
         // Placeholder for getting a book by id logic
