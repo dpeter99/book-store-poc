@@ -1,5 +1,6 @@
 using BookStore.ApiService.Database;
 using BookStore.ApiService.Database.Entities;
+using BookStore.ApiService.Infrastructure;
 using BookStore.ApiService.Infrastructure.Auth;
 using BookStore.ApiService.Infrastructure.MuliTenant;
 using BookStore.ApiService.Infrastructure.Policies;
@@ -11,7 +12,10 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using OpenTelemetry.Trace;
 using Scalar.AspNetCore;
+using SimpleActivityExportProcessor = OpenTelemetry.SimpleActivityExportProcessor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,13 +62,14 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<IAuthorizationHandler, TenantAccessAuthorizationRequirementHandler>();
 
 
-builder.Services.AddHangfire(config =>
-{
+
+
+builder.Services.AddHangfire((sp,config) => 
     config.UsePostgreSqlStorage(c =>
-    {
-        c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("bookdb"));
-    });
-});
+        //c.UseConnectionFactory(new HangfireDbFactory(sp))
+        c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("bookdb"))
+        ) 
+    );
 
 builder.Services.AddHangfireServer(c =>
 {
