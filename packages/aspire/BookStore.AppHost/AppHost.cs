@@ -1,3 +1,5 @@
+using BookStore.AppHost;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 var postgres = builder.AddPostgres("postgresql")
@@ -8,6 +10,7 @@ var bookdb = postgres.AddDatabase("bookdb");
 
 var apiService = builder.AddProject<Projects.BookStore_ApiService>("apiservice")
     .WithHttpHealthCheck("/health")
+    .WithScalar()
     .WithReference(bookdb);
 
 var worker = builder.AddProject<Projects.BookStore_OptimizationRunner>("optimizer")

@@ -1,3 +1,4 @@
+using System.Reflection;
 using Asp.Versioning;
 using Asp.Versioning.Routing;
 using BookStore.ApiService;
@@ -20,18 +21,22 @@ using OpenTelemetry.Trace;
 using Scalar.AspNetCore;
 using SimpleActivityExportProcessor = OpenTelemetry.SimpleActivityExportProcessor;
 
+var openApiBuildTime = Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
-builder.AddServiceDefaults();
+if(!openApiBuildTime)
+	builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
 
 builder.Services.AddVersionedOpenApi([
-	("internal", new ApiVersion(1)),
-	("internal", new ApiVersion(2)),
-	("public", new ApiVersion(1))
+	("", new ApiVersion(1)),
+	("public", new ApiVersion(1)),
+	("public", new ApiVersion(2))
 ]);
 
 builder.Services.AddControllers();
@@ -80,7 +85,8 @@ builder.Services.AddHangfire((sp,config) =>
         ) 
     );
 
-builder.Services.AddHangfireServer(c => { c.Queues = ["local"]; });
+if(!openApiBuildTime)
+	builder.Services.AddHangfireServer(c => { c.Queues = ["local"]; });
 
 builder.Services.AddOpenTelemetry()
 	.WithTracing(c => c.AddProcessor(new HangfirePostgresTraceFilteringProcessor()));
@@ -110,19 +116,23 @@ app.UseMiddleware<TenantResolverMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHangfireDashboard();
+if(!openApiBuildTime)
+	app.UseHangfireDashboard();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi().AllowAnonymous();
     app.MapScalarApiReference(c =>
 	    {
-		    c.AddDocuments(["internal-v1","internal-v2","public-v1"]);
+		    c.AddDocuments(["v1","public-v1","public-v2"]);
 	    })
 	    .AllowAnonymous();
 }
 
 app.MapDefaultEndpoints();
-app.MapControllers();
+// app.MapControllers();
+
+// app.Map
+
 
 app.Run();

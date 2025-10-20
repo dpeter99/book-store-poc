@@ -17,36 +17,24 @@ public static class OpenApiHostingExtension
 			.AddApiExplorer(o =>
 			{
 				o.SubstituteApiVersionInUrl = true;
-				o.FormatGroupName = (name, version) => $"{name}-{version}";
+				o.FormatGroupName = (name, version) => string.IsNullOrWhiteSpace(name) ? version : $"{name}-{version}";
 				o.GroupNameFormat = "'v'VVV";
 			});
 		
 		foreach (var version in versions)
 		{
 			var versionStr = $"v{version.version:VVV}"; 
-			var name = $"{version.group}-{versionStr}";
-			
-			Console.WriteLine(name);
+			var name = string.IsNullOrWhiteSpace(version.group) ? versionStr : $"{version.group}-{versionStr}";
 			
 			services.AddOpenApi(name,
 				options =>
 				{
-					options.AddOperationTransformer((operation, context, arg3) =>
-					{
-						
-						return Task.CompletedTask;
-					});
+					options.AddBrandedTypes();
 					options.AddDocumentTransformer((document, context, arg3) =>
 					{
 						document.Info.Version = versionStr;
-						// document.Servers = [new (){Url = "http://localhost:5493/api"}];
 						return Task.CompletedTask;
 					});
-					options.ShouldInclude = description =>
-					{
-						Console.WriteLine($"{description.ActionDescriptor.DisplayName} Group: {description.GroupName}");
-						return description.GroupName == name;
-					};
 				});
 		}
 		

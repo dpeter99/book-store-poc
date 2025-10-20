@@ -1,5 +1,10 @@
 
 
+## API setup
+### immediateplatform
+- https://immediateplatform.dev/
+
+
 ## Job schedulling
 ### Job lib
 #### TickerQ
@@ -9,6 +14,7 @@ Not too active, months since last commit
 - https://www.hangfire.io/
 
 #### Quartz.net
+- https://www.quartz-scheduler.net/
 
 ### Messaging lib
 #### MassTransit
@@ -38,3 +44,16 @@ Not too active, months since last commit
 
 ## Data Formats
  - https://www.rfc-editor.org/rfc/rfc9457
+
+ 
+ 
+# Examples / Templates
+
+- https://github.com/dotnet/eShop
+- https://github.com/fullstackhero/dotnet-starter-kit
+
+# Issues
+
+- OpenApi versioning
+  - https://github.com/dotnet/aspnetcore/issues/56314
+  - https://github.com/dotnet/eShop/blob/main/src/eShop.ServiceDefaults/OpenApiOptionsExtensions.cs

@@ -6,6 +6,14 @@ namespace BookStore.AppHost;
 
 public static class OpenApiResourceBuilderExtensions
 {
+	public static IResourceBuilder<T> WithScalar<T>(this IResourceBuilder<T> builder)
+		where T : IResourceWithEndpoints
+	{
+		builder.WithOpenApiDocs("scalar", "Scalar Docs", "scalar");
+		
+		return builder;
+	}
+	
 	public static IResourceBuilder<T> WithOpenApiDocs<T>(
 		this IResourceBuilder<T> builder,
 		string name,

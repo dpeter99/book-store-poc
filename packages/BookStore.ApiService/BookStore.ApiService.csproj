@@ -7,6 +7,8 @@
 
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+		<OpenApiDocumentsDirectory>$(SolutionDir)/packages/BookStore.OpenApiSpec</OpenApiDocumentsDirectory>
     </PropertyGroup>
 
     <ItemGroup>
@@ -28,6 +30,10 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.ApiDescription.Server" Version="9.0.10">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
         <PackageReference Include="Scalar.AspNetCore" Version="2.9.0" />
     </ItemGroup>

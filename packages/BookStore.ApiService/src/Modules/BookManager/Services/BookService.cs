@@ -23,7 +23,7 @@ public class BookService(AppDbContext dbContext, ITenantService tenantService) :
                     Title = b.Title,
                     Genre = b.Genre,
                     PublishedDate = b.PublishedDate,
-                    AuthorId = b.AuthorId
+                    AuthorId = b.Author.Id
                 }
             )
             .ToListAsync();
@@ -32,7 +32,9 @@ public class BookService(AppDbContext dbContext, ITenantService tenantService) :
     
     public async Task<Book?> GetById(Guid id)
     {
-        var bookEntity = await dbContext.Books.FirstOrDefaultAsync(b => b.Id == id);
+        var bookEntity = await dbContext.Books
+	        .Include(book => book.AuthorId)
+	        .FirstOrDefaultAsync(b => b.Id == id);
         if (bookEntity == null)
         {
             return null;

@@ -10,15 +10,13 @@ namespace BookStore.ApiService.Modules.BookManager.Controllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/book", Name = "Books")]
-[Authorize(Policy = "User")]
 [ApiVersion("1")]
-[EndpointGroupName("internal")]
+[Authorize(Policy = "User")]
 public class BookController(IBookService bookService) : Controller
 {
     
     [HttpGet]
     [EndpointName("get-books")]
-    [ApiVersion("2")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BookDTO>))]
     public async Task<Ok<IEnumerable<BookDTO>>> GetBooks()
     {

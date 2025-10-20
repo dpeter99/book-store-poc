@@ -9,16 +9,17 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookStore.ApiService.Modules.BookManager.PublicApi;
 
 [ApiController]
-[ApiVersion("1")]
+[ApiVersion("2")]
 [EndpointGroupName("public")]
-[Route("api/v{version:apiVersion}/book")]
+[Route("public-api/v{version:apiVersion}/book")]
 [Authorize(Policy = "User")]
 public class BookController(IBookService bookService) : Controller
 {
     
 	[HttpGet]
-	[ApiVersion("2")]
 	[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BookDTO>))]
+	[ApiVersion("1")]
+	[ApiVersion("2")]
 	public async Task<Ok<IEnumerable<BookDTO>>> GetBooks()
 	{
 		// Placeholder for getting books logic
