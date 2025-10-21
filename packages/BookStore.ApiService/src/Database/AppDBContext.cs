@@ -8,8 +8,8 @@ namespace BookStore.ApiService.Database;
 
 public class AppDbContext : DbContext
 {
-    public Guid? CurrentTenantId { get; set; }
-    
+    public TenantId? CurrentTenantId { get; set; }
+
     public AppDbContext(DbContextOptions<AppDbContext> options,
         ITenantService tenantService) : base(options)
     {
@@ -26,12 +26,19 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Apply entity type configurations
+        modelBuilder.ApplyConfiguration(new TenantEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new BookEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new AuthorEntityTypeConfiguration());
+
+        // Apply tenant query filters (requires CurrentTenantId context)
         modelBuilder.Entity<Book>()
-             .HasQueryFilter(a => a.TenantId == CurrentTenantId);
-        
+            .HasQueryFilter(a => a.TenantId == CurrentTenantId);
+
         modelBuilder.Entity<User>()
             .HasQueryFilter(u => u.TenantId == CurrentTenantId);
-        
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

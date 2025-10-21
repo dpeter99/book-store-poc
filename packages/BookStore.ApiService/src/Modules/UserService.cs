@@ -1,4 +1,5 @@
 using BookStore.ApiService.Database;
+using BookStore.ApiService.Database.Entities;
 using BookStore.ApiService.MuliTenant;
 using Microsoft.AspNetCore.Authentication;
 
@@ -6,11 +7,11 @@ namespace BookStore.ApiService.Modules;
 
 public class User
 {
-    public Guid Id { get; set; }
+    public UserId Id { get; set; }
     public string Username { get; set; } = null!;
     public string[] Roles { get; set; } = null!;
-    
-    public Guid? TenantId { get; set; }
+
+    public TenantId? TenantId { get; set; }
 }
 
 public interface IUserService

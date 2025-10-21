@@ -1,32 +1,33 @@
 using BookStore.ApiService.Database;
+using BookStore.ApiService.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.ApiService.MuliTenant;
 
 public class Tenant
 {
-    public Guid Id { get; set; }
+    public TenantId Id { get; set; }
     public required string Name { get; set; }
     public required string Domain { get; set; }
 }
 
 public interface ITenantService
 {
-    Guid? CurrentTenantId { get; }
+    TenantId? CurrentTenantId { get; }
     Tenant? CurrentTenant { get; }
-    
+
     public Task<bool> SetTenantByDomain(string domain);
-    
+
     Task<Tenant?> GetTenantByDomain(string domain);
-    
+
     // TODO: Add creation and other handling
 }
 
 public class TenantService(TenantDbContext db, ILogger<TenantService> logger): ITenantService
 {
     private Tenant? _tenant;
-    
-    public Guid? CurrentTenantId => _tenant?.Id;
+
+    public TenantId? CurrentTenantId => _tenant?.Id;
     public Tenant? CurrentTenant => _tenant;
 
 

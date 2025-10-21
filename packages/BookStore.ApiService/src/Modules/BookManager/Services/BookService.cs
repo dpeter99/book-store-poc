@@ -1,4 +1,6 @@
 using BookStore.ApiService.Database;
+using BookStore.ApiService.Database.Entities;
+using BookStore.ApiService.Database.Entities.Modules.Books;
 using BookStore.ApiService.Modules.BookManager.Model;
 using BookStore.ApiService.MuliTenant;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +10,7 @@ namespace BookStore.ApiService.Modules.BookManager.Services;
 public interface IBookService
 {
     Task<IEnumerable<Book>> GetAll();
-    Task<Book?> GetById(Guid id);
+    Task<Book?> GetById(BookId id);
     Task AddBook(Book book);
 }
 
@@ -30,7 +32,7 @@ public class BookService(AppDbContext dbContext, ITenantService tenantService) :
         return books;
     }
     
-    public async Task<Book?> GetById(Guid id)
+    public async Task<Book?> GetById(BookId id)
     {
         var bookEntity = await dbContext.Books
 	        .Include(book => book.AuthorId)
@@ -60,7 +62,7 @@ public class BookService(AppDbContext dbContext, ITenantService tenantService) :
             Genre = book.Genre,
             PublishedDate = book.PublishedDate,
             AuthorId = book.AuthorId,
-            TenantId = tenantService.CurrentTenantId ?? Guid.Empty //TODO figure out a better way to do this
+            TenantId = tenantService.CurrentTenantId ?? TenantId.Unspecified //TODO figure out a better way to do this
         });
         await dbContext.SaveChangesAsync();
     }

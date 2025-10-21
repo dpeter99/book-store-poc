@@ -25,7 +25,7 @@ public class TenantAccessAuthorizationRequirementHandler(ITenantService tenantSe
                     return Task.CompletedTask;
                 }
 
-                if (tenantService.CurrentTenantId.ToString() == tenantClaim.Value)
+                if (tenantService.CurrentTenantId?.Value.ToString() == tenantClaim.Value)
                 {
                     context.Succeed(requirement);
                 }

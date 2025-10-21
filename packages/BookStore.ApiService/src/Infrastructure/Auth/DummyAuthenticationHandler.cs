@@ -59,15 +59,15 @@ public sealed class DummyAuthenticationHandler(
         Logger.LogInformation("Authenticated User is Id: {id}", user.Id);
         
         List<Claim> claims = [
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.Value.ToString()),
             new Claim(ClaimTypes.Name, user.Username),
         ];
-        
+
         claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r)));
-        
+
         var userTenantId = user.TenantId;
         if (userTenantId is not null)
-            claims.Add(new Claim(Claims.TenantId, userTenantId.ToString()!));
+            claims.Add(new Claim(Claims.TenantId, userTenantId.Value.Value.ToString()));
         
         return AuthenticateResult.Success(
             new AuthenticationTicket(
