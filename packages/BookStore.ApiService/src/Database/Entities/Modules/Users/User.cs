@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Vogen;
 
-namespace BookStore.ApiService.Database.Entities;
+namespace BookStore.ApiService.Database.Entities.Modules.Users;
 
 [ValueObject<long>(conversions: Conversions.EfCoreValueConverter)]
 [Instance("Unspecified", 0)]
@@ -19,7 +19,7 @@ public class User
 
 	public string[] Roles { get; set; } = null!;
 
-	public TenantId? TenantId { get; set; }
+	public required TenantId TenantId { get; set; }
 	public Tenant? Tenant { get; set; }
 }
 
@@ -32,7 +32,7 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
 			.HasVogenConversion()
 			.ValueGeneratedOnAdd();
 
-		// Configure nullable TenantId with conversion
+		// Configure TenantId with conversion
 		builder.Property(u => u.TenantId)
 			.HasVogenConversion();
 	}

@@ -1,7 +1,6 @@
 using BookStore.ApiService.Database;
 using BookStore.ApiService.Database.Entities;
 using BookStore.ApiService.Database.Entities.Modules.Books;
-using BookStore.ApiService.Modules.BookManager.Model;
 using BookStore.ApiService.MuliTenant;
 using Microsoft.EntityFrameworkCore;
 
@@ -53,9 +52,9 @@ public class BookService(AppDbContext dbContext, ITenantService tenantService) :
     
     public async Task AddBook(Book book)
     {
-        
+
         // Logic to add book to the database
-        dbContext.Books.Add(new Database.Entities.Modules.Books.Book()
+        dbContext.Books.Add(new Book()
         {
             Id = book.Id,
             Title = book.Title,

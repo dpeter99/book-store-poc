@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using BookStore.ApiService.Database;
-using BookStore.ApiService.Modules;
+using BookStore.ApiService.Modules.UserManager.Services;
 using BookStore.ApiService.MuliTenant;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -30,29 +30,29 @@ public sealed class DummyAuthenticationHandler(
     public const string AuthenticationScheme = "DummyLogin";
     public const string HeaderName = "Authorization";
 
-    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+    protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        var result = Authenticate();
+        var result = await Authenticate();
         if (result.Succeeded)
-            return Task.FromResult(result);
+            return result;
 
-        return Task.FromResult(AuthenticateResult.NoResult());
+        return AuthenticateResult.NoResult();
     }
 
-    private AuthenticateResult Authenticate()
+    private async Task<AuthenticateResult> Authenticate()
     {
         var loginString = Context.Request.Headers[HeaderName].FirstOrDefault();
         if (loginString is null)
             return AuthenticateResult.NoResult();
 
         var loginValue = DecodeUserIdAndPassword(loginString);
-        
+
         if(loginValue.userid is null || loginValue.password is null)
             return AuthenticateResult.Fail("Invalid Authorization Header");
-        
+
         Logger.LogInformation("Authenticate User: {loginValue}", loginValue);
-        
-        var user = userService.GetUserByName(loginValue.userid);
+
+        var user = await userService.GetUserByName(loginValue.userid);
         if(user is null)
             return AuthenticateResult.Fail("User not found");
 
@@ -65,9 +65,7 @@ public sealed class DummyAuthenticationHandler(
 
         claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
-        var userTenantId = user.TenantId;
-        if (userTenantId is not null)
-            claims.Add(new Claim(Claims.TenantId, userTenantId.Value.Value.ToString()));
+        claims.Add(new Claim(Claims.TenantId, user.TenantId.Value.ToString()));
         
         return AuthenticateResult.Success(
             new AuthenticationTicket(

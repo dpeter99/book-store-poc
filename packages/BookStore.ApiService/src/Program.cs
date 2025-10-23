@@ -10,6 +10,7 @@ using BookStore.ApiService.Infrastructure.MuliTenant;
 using BookStore.ApiService.Infrastructure.Policies;
 using BookStore.ApiService.Modules;
 using BookStore.ApiService.Modules.BookManager;
+using BookStore.ApiService.Modules.UserManager;
 using BookStore.ApiService.MuliTenant;
 using BookStore.JobContracts.Contracts;
 using Hangfire;
@@ -51,7 +52,6 @@ builder.Services.AddDbContext<TenantDbContext>(options =>
 builder.EnrichNpgsqlDbContext<TenantDbContext>();
 
 builder.Services.AddScoped<ITenantService, TenantService>();
-builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddAuthentication()
     .AddScheme<DummyAuthenticationSchemeOptions, DummyAuthenticationHandler>(
@@ -93,6 +93,7 @@ builder.Services.AddOpenTelemetry()
 
 
 builder.AddBookModule();
+builder.AddUserModule();
 
 var app = builder.Build();
 

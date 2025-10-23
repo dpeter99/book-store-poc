@@ -1,5 +1,6 @@
 using BookStore.ApiService.Database.Entities;
 using BookStore.ApiService.Database.Entities.Modules.Books;
+using BookStore.ApiService.Database.Entities.Modules.Users;
 using BookStore.ApiService.MuliTenant;
 using Microsoft.EntityFrameworkCore;
 using Tenant = BookStore.ApiService.Database.Entities.Tenant;
