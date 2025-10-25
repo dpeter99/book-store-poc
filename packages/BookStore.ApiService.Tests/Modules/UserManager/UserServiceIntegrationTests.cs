@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BookStore.ApiService.Tests.Modules.UserManager;
 
-public class UserServiceIntegrationTests : IClassFixture<ApiServiceFixture>, IDisposable
+public class UserServiceIntegrationTests : IClassFixture<ApiServiceFixture>, IAsyncLifetime
 {
 	private readonly ApiServiceFixture _fixture;
 	private readonly IServiceScope _scope;
@@ -16,15 +16,20 @@ public class UserServiceIntegrationTests : IClassFixture<ApiServiceFixture>, IDi
 	{
 		_fixture = fixture;
 		_scope = fixture.Services.CreateScope();
-		var tenantService = _scope.ServiceProvider.GetRequiredService<ITenantService>();
-		tenantService.SetTenant(fixture.tenantId);
-	}
-	
-	public void Dispose()
-	{
-		_scope.Dispose();
 	}
 
+	public async Task InitializeAsync()
+	{
+		var tenantService = _scope.ServiceProvider.GetRequiredService<ITenantService>();
+		await tenantService.SetTenant(_fixture.tenantId);
+	}
+
+	public Task DisposeAsync()
+	{
+		_scope.Dispose();
+		return Task.CompletedTask;
+	}
+	
 
 	[Fact]
 	public async Task CreateUser_ShouldCreateUserSuccessfully()
@@ -49,4 +54,5 @@ public class UserServiceIntegrationTests : IClassFixture<ApiServiceFixture>, IDi
 		Assert.Equal(username, retrievedUser.Username);
 		Assert.Equal(roles, retrievedUser.Roles);
 	}
+	
 }

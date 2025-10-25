@@ -41,10 +41,11 @@ public class ApiServiceFixture : IAsyncLifetime
         await using (var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>())
         {
             await dbContext.Database.MigrateAsync();
-            // await dbContext.Database.EnsureCreatedAsync();
-            await AddTestData(dbContext);
             await dbContext.SaveChangesAsync();
         }
+
+        await using var tenantDbContext = scope.ServiceProvider.GetRequiredService<TenantDbContext>();
+        await AddTestTenant(tenantDbContext);
     }
 
     public async Task DisposeAsync()
@@ -52,7 +53,7 @@ public class ApiServiceFixture : IAsyncLifetime
         await _dbContainer.DisposeAsync();
     }
 
-    private async Task AddTestData(AppDbContext context)
+    private async Task AddTestTenant(TenantDbContext context)
     {
         var tenant = new Tenant()
         {
