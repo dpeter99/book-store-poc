@@ -43,4 +43,8 @@
       <Folder Include="src\Database\Migrations\" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="BookStore.ApiService.Tests" />
+    </ItemGroup>
+
 </Project>

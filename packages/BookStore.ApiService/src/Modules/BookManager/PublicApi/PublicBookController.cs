@@ -1,6 +1,6 @@
 using Asp.Versioning;
+using BookStore.ApiService.Database.Entities.Modules.Books;
 using BookStore.ApiService.Modules.BookManager.DTO;
-using BookStore.ApiService.Modules.BookManager.Model;
 using BookStore.ApiService.Modules.BookManager.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -32,10 +32,10 @@ public class BookController(IBookService bookService) : Controller
 	[HttpGet("{id}")]
 	[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookDTO))]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
-	public async Task<Results<Ok<BookDTO>,NotFound>> GetBookById(Guid id)
+	public async Task<Results<Ok<BookDTO>,NotFound>> GetBookById(long id)
 	{
 		// Placeholder for getting a book by id logic
-		var book = await bookService.GetById(id);
+		var book = await bookService.GetById(BookId.From(id));
 		if (book == null)
 		{
 			return TypedResults.NotFound();

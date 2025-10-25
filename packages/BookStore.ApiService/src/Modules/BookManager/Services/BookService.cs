@@ -3,22 +3,24 @@ using BookStore.ApiService.Database.Entities;
 using BookStore.ApiService.Database.Entities.Modules.Books;
 using BookStore.ApiService.MuliTenant;
 using Microsoft.EntityFrameworkCore;
+using DomainBook = BookStore.ApiService.Modules.BookManager.Model.Book;
+using DbBook = BookStore.ApiService.Database.Entities.Modules.Books.Book;
 
 namespace BookStore.ApiService.Modules.BookManager.Services;
 
 public interface IBookService
 {
-    Task<IEnumerable<Book>> GetAll();
-    Task<Book?> GetById(BookId id);
-    Task AddBook(Book book);
+    Task<IEnumerable<DomainBook>> GetAll();
+    Task<DomainBook?> GetById(BookId id);
+    Task AddBook(DomainBook book);
 }
 
 public class BookService(AppDbContext dbContext, ITenantService tenantService) : IBookService
 {
-    public async Task<IEnumerable<Book>> GetAll()
+    public async Task<IEnumerable<DomainBook>> GetAll()
     {
         var books = await dbContext.Books
-            .Select(b => new Book()
+            .Select(b => new DomainBook()
                 {
                     Id = b.Id,
                     Title = b.Title,
@@ -30,8 +32,8 @@ public class BookService(AppDbContext dbContext, ITenantService tenantService) :
             .ToListAsync();
         return books;
     }
-    
-    public async Task<Book?> GetById(BookId id)
+
+    public async Task<DomainBook?> GetById(BookId id)
     {
         var bookEntity = await dbContext.Books
 	        .Include(book => book.AuthorId)
@@ -40,7 +42,7 @@ public class BookService(AppDbContext dbContext, ITenantService tenantService) :
         {
             return null;
         }
-        return new Book()
+        return new DomainBook()
         {
             Id = bookEntity.Id,
             Title = bookEntity.Title,
@@ -49,12 +51,12 @@ public class BookService(AppDbContext dbContext, ITenantService tenantService) :
             AuthorId = bookEntity.AuthorId
         };
     }
-    
-    public async Task AddBook(Book book)
+
+    public async Task AddBook(DomainBook book)
     {
 
         // Logic to add book to the database
-        dbContext.Books.Add(new Book()
+        dbContext.Books.Add(new DbBook()
         {
             Id = book.Id,
             Title = book.Title,

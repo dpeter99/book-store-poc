@@ -5,7 +5,7 @@ namespace BookStore.ApiService.Modules.BookManager.DTO;
 public class BookDTO
 {
 	[BrandedType("BookId")]
-    public Guid Id { get; set; }
+    public long Id { get; set; }
     public required string Title { get; set; }
     public required string Genre { get; set; }
     public DateTime PublishedDate { get; set; }
@@ -15,11 +15,11 @@ public class BookDTO
     {
         return new()
         {
-            Id = book.Id,
+            Id = book.Id.Value,
             Title = book.Title,
             Genre = book.Genre,
             PublishedDate = book.PublishedDate,
-            AuthorId = book.AuthorId
+            AuthorId = book.AuthorId.Value
         };
     }
 }

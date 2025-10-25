@@ -3,40 +3,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.ApiService.Database;
 
-public class TenantDbContext: DbContext
+public class TenantDbContext(DbContextOptions<TenantDbContext> options) : DbContext(options)
 {
     public required DbSet<Tenant> Tenants { get; set; }
 
-    public TenantDbContext(DbContextOptions<TenantDbContext> options) : base(options)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfiguration(new TenantEntityTypeConfiguration());
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-        
-        optionsBuilder.UseSeeding(((context, b) =>
-        {
-            context.Set<Tenant>()
-                .Add(new Tenant()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "test",
-                    Domain = "test",
-                });
-            context.SaveChanges();
-        }));
-        optionsBuilder.UseAsyncSeeding((async (context, b, token) =>
-        {
-            context.Set<Tenant>()
-                .Add(new Tenant()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "test",
-                    Domain = "test",
-                });
-            await context.SaveChangesAsync(token);
-        }));
     }
 }

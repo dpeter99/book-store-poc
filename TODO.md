@@ -1,13 +1,6 @@
 
 
 
-- Clean up the traces from hangfire
-- Add traces to hangfire jobs
-
-- Add proper endpoint for starting a job
-- Clean up the open api spec and set up client generation form it
-- Add tests
-- Add authors CRUD
-- Add proper FK keys to the db
-- Create a domain event
-- 
+- [ ] Add dto auto mapper using https://github.com/riok/mapperly
+- [ ] Split to db per tenant setup
+- [ ] Add dev db generator 

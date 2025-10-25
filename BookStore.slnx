@@ -2,6 +2,7 @@
   <Project Path="packages/aspire/BookStore.AppHost\BookStore.AppHost.csproj" Type="Classic C#" />
   <Project Path="packages/aspire/BookStore.ServiceDefaults\BookStore.ServiceDefaults.csproj" Type="Classic C#" />
   <Project Path="packages/BookStore.ApiService\BookStore.ApiService.csproj" Type="Classic C#" />
+  <Project Path="packages\BookStore.ApiService.Tests\BookStore.ApiService.Tests.csproj" Type="Classic C#" />
   <Project Path="packages\BookStore.JobContracts\BookStore.JobContracts.csproj" Type="Classic C#" />
   <Project Path="packages\BookStore.OptimizationRunner\BookStore.OptimizationRunner.csproj" Type="Classic C#" />
 </Solution>

@@ -80,8 +80,7 @@ builder.Services.AddScoped<IAuthorizationHandler, TenantAccessAuthorizationRequi
 
 builder.Services.AddHangfire((sp,config) => 
     config.UsePostgreSqlStorage(c =>
-        //c.UseConnectionFactory(new HangfireDbFactory(sp))
-        c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("bookdb"))
+        c.UseNpgsqlConnection(() => builder.Configuration.GetConnectionString("bookdb"))
         ) 
     );
 
