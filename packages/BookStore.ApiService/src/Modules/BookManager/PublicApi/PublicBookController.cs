@@ -24,7 +24,7 @@ public class BookController(IBookService bookService) : Controller
 	{
 		// Placeholder for getting books logic
 		var books = (await bookService.GetAll())
-			.Select(BookDTO.Create);
+			.Select(BookDTO.Mappings.FromModel);
         
 		return TypedResults.Ok(books);
 	}
@@ -41,6 +41,6 @@ public class BookController(IBookService bookService) : Controller
 			return TypedResults.NotFound();
 		}
 
-		return TypedResults.Ok(BookDTO.Create(book));
+		return TypedResults.Ok(BookDTO.Mappings.FromModel(book));
 	}
 }

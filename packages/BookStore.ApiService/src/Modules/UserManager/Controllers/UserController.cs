@@ -25,7 +25,7 @@ public class UserController(IUserService userService) : Controller
 	[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserDTO>))]
 	public async Task<Ok<IEnumerable<UserDTO>>> GetUsers()
 	{
-		var users = (await userService.GetAll()).Select(UserDTO.Create);
+		var users = (await userService.GetAll()).Select(UserDTO.Mappings.FromEntity);
 		return TypedResults.Ok(users);
 	}
 
@@ -44,7 +44,7 @@ public class UserController(IUserService userService) : Controller
 			return TypedResults.NotFound();
 		}
 
-		return TypedResults.Ok(UserDTO.Create(user));
+		return TypedResults.Ok(UserDTO.Mappings.FromEntity(user));
 	}
 
 	/// <summary>
@@ -62,7 +62,7 @@ public class UserController(IUserService userService) : Controller
 			return TypedResults.NotFound();
 		}
 
-		return TypedResults.Ok(UserDTO.Create(user));
+		return TypedResults.Ok(UserDTO.Mappings.FromEntity(user));
 	}
 
 	/// <summary>
@@ -74,7 +74,7 @@ public class UserController(IUserService userService) : Controller
 	public async Task<Created<UserDTO>> CreateUser([FromBody] CreateUserDTO createDto)
 	{
 		var user = await userService.CreateUser(createDto.Username, createDto.Roles);
-		var dto = UserDTO.Create(user);
+		var dto = UserDTO.Mappings.FromEntity(user);
 		return TypedResults.Created($"/api/v1/user/{user.Id.Value}", dto);
 	}
 
@@ -98,7 +98,7 @@ public class UserController(IUserService userService) : Controller
 			return TypedResults.NotFound();
 		}
 
-		return TypedResults.Ok(UserDTO.Create(user));
+		return TypedResults.Ok(UserDTO.Mappings.FromEntity(user));
 	}
 
 	/// <summary>

@@ -46,6 +46,7 @@
   },
   "components": {
     "schemas": {
+      "AuthorId": { },
       "BookDTO": {
         "required": [
           "title",
@@ -54,8 +55,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "brand::BookId"
+            "$ref": "#/components/schemas/BookId"
           },
           "title": {
             "type": "string"
@@ -68,11 +68,11 @@
             "format": "date-time"
           },
           "authorId": {
-            "type": "integer",
-            "format": "int64"
+            "$ref": "#/components/schemas/AuthorId"
           }
         }
-      }
+      },
+      "BookId": { }
     }
   },
   "tags": [

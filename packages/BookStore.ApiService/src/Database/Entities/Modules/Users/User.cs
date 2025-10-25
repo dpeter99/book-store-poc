@@ -6,7 +6,7 @@ using Vogen;
 
 namespace BookStore.ApiService.Database.Entities.Modules.Users;
 
-[ValueObject<long>(conversions: Conversions.EfCoreValueConverter)]
+[ValueObject<long>(conversions: Conversions.EfCoreValueConverter | Conversions.SystemTextJson)]
 [Instance("Unspecified", 0)]
 public readonly partial record struct UserId;
 

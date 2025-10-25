@@ -23,7 +23,7 @@ public class BookController(IBookService bookService) : Controller
     {
         // Placeholder for getting books logic
         var books = (await bookService.GetAll())
-            .Select(BookDTO.Create);
+            .Select(BookDTO.Mappings.FromModel);
         
         return TypedResults.Ok(books);
     }
@@ -40,21 +40,17 @@ public class BookController(IBookService bookService) : Controller
             return TypedResults.NotFound();
         }
 
-        return TypedResults.Ok(BookDTO.Create(book));
+        return TypedResults.Ok(BookDTO.Mappings.FromModel(book));
     }
 
     [HttpPost]
     public async Task<Created> AddBook([FromBody] CreateBookDTO book)
     {
         // Placeholder for adding a new book logic
-        await bookService.AddBook(new DomainBook()
-        {
-            Id = BookId.Unspecified,
-            Title = book.Title,
-            Genre = book.Genre,
-            PublishedDate = book.PublishedDate,
-            AuthorId = AuthorId.From(book.AuthorId)
-        });
+        var domainBook = CreateBookDTO.Mappings.ToModel(book);
+        domainBook.Id = BookId.Unspecified;
+
+        await bookService.AddBook(domainBook);
 
         return TypedResults.Created();
     }
