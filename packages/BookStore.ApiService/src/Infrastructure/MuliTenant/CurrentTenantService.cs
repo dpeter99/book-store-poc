@@ -17,6 +17,7 @@ public interface ITenantService
     Tenant? CurrentTenant { get; }
 
     public Task<bool> SetTenantByDomain(string domain);
+    public Task<bool> SetTenant(TenantId id);
 
     Task<Tenant?> GetTenantByDomain(string domain);
 
@@ -42,7 +43,23 @@ public class TenantService(TenantDbContext db, ILogger<TenantService> logger): I
         logger.LogInformation("Tenant set to: {tenant}", tenant.Name);
         return true;
     }
-    
+
+    public async Task<bool> SetTenant(TenantId id)
+    {
+        var tenant = await db.Tenants.FindAsync(id);
+        if(tenant is null)
+            return false;
+        
+        _tenant = new ()
+        {
+            Id = tenant.Id,
+            Name = tenant.Name,
+            Domain = tenant.Domain,
+        };
+        logger.LogInformation("Tenant set to: {tenant}", tenant.Name);
+        return true;
+    }
+
     public async Task<Tenant?> GetTenantByDomain(string domain)
     {
         var tenant = await db.Tenants.FirstOrDefaultAsync(t => t.Domain == domain);

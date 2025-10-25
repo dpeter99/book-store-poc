@@ -8,7 +8,7 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 
-		<OpenApiDocumentsDirectory>$(SolutionDir)/packages/BookStore.OpenApiSpec</OpenApiDocumentsDirectory>
+		<OpenApiDocumentsDirectory>../../packages/BookStore.OpenApiSpec</OpenApiDocumentsDirectory>
     </PropertyGroup>
 
     <ItemGroup>

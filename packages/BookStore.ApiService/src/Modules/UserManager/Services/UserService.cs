@@ -2,6 +2,7 @@ using BookStore.ApiService.Database;
 using BookStore.ApiService.Database.Entities;
 using BookStore.ApiService.Database.Entities.Modules.Users;
 using BookStore.ApiService.MuliTenant;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.ApiService.Modules.UserManager.Services;
@@ -62,9 +63,13 @@ public class UserService(AppDbContext dbContext, ITenantService tenantService) :
 
 	public async Task<User> CreateUser(string username, string[] roles)
 	{
+		if(tenantService.CurrentTenantId == null)
+			throw new Exception("Tenant not found");
+		
+		Console.WriteLine($"TenantID: {tenantService.CurrentTenantId}");
+		
 		var user = new User
 		{
-			Id = UserId.Unspecified, // Will be auto-generated
 			Username = username,
 			Roles = roles,
 			TenantId = tenantService.CurrentTenantId ?? TenantId.Unspecified

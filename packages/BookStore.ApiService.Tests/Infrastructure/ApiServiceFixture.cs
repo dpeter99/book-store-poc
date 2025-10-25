@@ -1,4 +1,5 @@
 using BookStore.ApiService.Database;
+using BookStore.ApiService.Database.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -10,58 +11,65 @@ using Testcontainers.PostgreSql;
 
 namespace BookStore.ApiService.Tests.Infrastructure;
 
-public class ApiServiceFixture : IDisposable, IAsyncLifetime
+public class ApiServiceFixture : IAsyncLifetime
 {
-    private readonly PostgreSqlContainer _dbContainer;
+    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
+        .WithImage("postgres:16")
+        .WithDatabase("bookstore_test")
+        .WithUsername("postgres")
+        .WithPassword("postgres")
+        .Build();
+    
     private WebApplicationFactory<Program> _factory = default!;
 
     public IServiceProvider Services = null!;
     
-    public ApiServiceFixture()
-    {
-        // Start PostgreSQL container
-        _dbContainer = new PostgreSqlBuilder()
-            .WithImage("postgres:16")
-            .WithDatabase("bookstore_test")
-            .WithUsername("postgres")
-            .WithPassword("postgres")
-            .Build();
-    }
-
-    public void Dispose()
-    {
-        
-    }
+    public TenantId tenantId = TenantId.Unspecified;
 
     public async Task InitializeAsync()
     {
         Console.WriteLine("Initializing database...");
         await _dbContainer.StartAsync();
-        
+
         var connectionString = _dbContainer.GetConnectionString();
         Console.WriteLine($"Connection string: {connectionString}");
         _factory = new TestWebApplicationFactory(connectionString);
 
         Services = _factory.Services;
-        
+
         await using var scope = _factory.Services.CreateAsyncScope();
-        await using var dbContext = scope.ServiceProvider.GetService<AppDbContext>();
-        await dbContext.Database.EnsureCreatedAsync();
-        
+        await using (var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>())
+        {
+            await dbContext.Database.MigrateAsync();
+            // await dbContext.Database.EnsureCreatedAsync();
+            await AddTestData(dbContext);
+            await dbContext.SaveChangesAsync();
+        }
     }
 
-    public Task DisposeAsync()
+    public async Task DisposeAsync()
     {
-        return Task.CompletedTask;
+        await _dbContainer.DisposeAsync();
     }
+
+    private async Task AddTestData(AppDbContext context)
+    {
+        var tenant = new Tenant()
+        {
+            Name = "Test Tenant",
+            Domain = "testdomain",
+        };
+        context.Tenants.Add(tenant);
+        await context.SaveChangesAsync();
+
+        tenantId = tenant.Id;
+        Console.WriteLine($"Tenant Id: {tenantId}");
+    }
+    
 }
 
 file sealed class TestWebApplicationFactory(string connectionString) : WebApplicationFactory<Program>
 {
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-    }
-
     protected override IHost CreateHost(IHostBuilder builder)
     {
         builder.UseEnvironment("Testing");

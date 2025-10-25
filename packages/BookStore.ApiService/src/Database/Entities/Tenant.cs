@@ -14,7 +14,7 @@ public class Tenant
 {
 	[Key]
 	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-	public required TenantId Id { get; set; }
+	public TenantId Id { get; set; }
 	public required string Name { get; set; }
 	public required string Domain { get; set; }
 }
