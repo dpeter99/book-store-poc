@@ -17,6 +17,9 @@ public class Tenant
 	public TenantId Id { get; set; }
 	public required string Name { get; set; }
 	public required string Domain { get; set; }
+	
+	public string? ConnectionString { get; set; }
+
 }
 
 public class TenantEntityTypeConfiguration : IEntityTypeConfiguration<Tenant>

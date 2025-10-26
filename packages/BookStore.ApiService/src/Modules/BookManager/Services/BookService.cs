@@ -15,7 +15,7 @@ public interface IBookService
     Task AddBook(DomainBook book);
 }
 
-public class BookService(AppDbContext dbContext, ITenantService tenantService) : IBookService
+public class BookService(AppDbContext dbContext, ICurrentTenantService tenantService) : IBookService
 {
     public async Task<IEnumerable<DomainBook>> GetAll()
     {

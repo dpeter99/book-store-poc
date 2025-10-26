@@ -10,15 +10,15 @@ namespace BookStore.ApiService.Database;
 public class AppDbContext : DbContext
 {
     public TenantId? CurrentTenantId { get; set; }
+    public string? CurrentTenantConnectionString { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options,
-        ITenantService tenantService) : base(options)
+        ICurrentTenantService tenantService) : base(options)
     {
         CurrentTenantId = tenantService.CurrentTenantId;
+        CurrentTenantConnectionString = tenantService.CurrentTenantConnectionString;
     }
     
-    
-    public DbSet<Tenant> Tenants { get; set; }
     public DbSet<User> Users { get; set; }
     
     public DbSet<Book> Books { get; set; }
@@ -29,10 +29,7 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // Apply entity type configurations
-        modelBuilder.ApplyConfiguration(new TenantEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new BookEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new AuthorEntityTypeConfiguration());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
         // Apply tenant query filters (requires CurrentTenantId context)
         modelBuilder.Entity<Book>()
@@ -45,6 +42,9 @@ public class AppDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-        optionsBuilder.EnableSensitiveDataLogging();
+        if (CurrentTenantConnectionString is not null)
+        {
+            optionsBuilder.UseNpgsql(CurrentTenantConnectionString);
+        }
     }
 }

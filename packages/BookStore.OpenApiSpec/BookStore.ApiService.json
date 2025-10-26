@@ -334,6 +334,38 @@
         }
       }
     },
+    "/api/tenant": {
+      "post": {
+        "tags": [
+          "Tenant"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTenantData"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTenantData"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTenantData"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/book": {
       "get": {
         "tags": [
@@ -499,6 +531,21 @@
           }
         }
       },
+      "CreateTenantData": {
+        "required": [
+          "name",
+          "domain"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "domain": {
+            "type": "string"
+          }
+        }
+      },
       "CreateUserDTO": {
         "required": [
           "username"
@@ -588,6 +635,9 @@
   "tags": [
     {
       "name": "User"
+    },
+    {
+      "name": "Tenant"
     },
     {
       "name": "Book"

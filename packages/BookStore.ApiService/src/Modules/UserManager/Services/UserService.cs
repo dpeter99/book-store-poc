@@ -40,7 +40,7 @@ public interface IUserService
 	Task<bool> DeleteUser(UserId id);
 }
 
-public class UserService(AppDbContext dbContext, ITenantService tenantService) : IUserService
+public class UserService(AppDbContext dbContext, ICurrentTenantService tenantService) : IUserService
 {
 	public async Task<User?> GetUserByName(string userName)
 	{

@@ -3,17 +3,20 @@ using System;
 using BookStore.ApiService.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace BookStore.ApiService.src.Database.Migrations
+namespace BookStore.ApiService.src.Database.App.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251025214203_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,6 +126,9 @@ namespace BookStore.ApiService.src.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("ConnectionString")
+                        .HasColumnType("text");
+
                     b.Property<string>("Domain")
                         .IsRequired()
                         .HasColumnType("text");
@@ -133,7 +139,7 @@ namespace BookStore.ApiService.src.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tenants");
+                    b.ToTable("Tenant");
                 });
 
             modelBuilder.Entity("BookStore.ApiService.Database.Entities.Modules.Books.Book", b =>

@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace BookStore.ApiService.src.Database.Migrations
+namespace BookStore.ApiService.src.Database.App.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -27,17 +27,18 @@ namespace BookStore.ApiService.src.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tenants",
+                name: "Tenant",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Domain = table.Column<string>(type: "text", nullable: false)
+                    Domain = table.Column<string>(type: "text", nullable: false),
+                    ConnectionString = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tenants", x => x.Id);
+                    table.PrimaryKey("PK_Tenant", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,9 +80,9 @@ namespace BookStore.ApiService.src.Database.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Tenants_TenantId",
+                        name: "FK_Users_Tenant_TenantId",
                         column: x => x.TenantId,
-                        principalTable: "Tenants",
+                        principalTable: "Tenant",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -120,7 +121,7 @@ namespace BookStore.ApiService.src.Database.Migrations
                 name: "Authors");
 
             migrationBuilder.DropTable(
-                name: "Tenants");
+                name: "Tenant");
         }
     }
 }

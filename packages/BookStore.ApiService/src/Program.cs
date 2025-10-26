@@ -31,6 +31,9 @@ var builder = WebApplication.CreateBuilder(args);
 if(!openApiBuildTime)
 	builder.AddServiceDefaults();
 
+builder.Services.AddOpenTelemetry()
+    .WithTracing(c => c.AddSource(nameof(TenantService)));
+
 // Add services to the container.
 builder.Services.AddProblemDetails();
 
@@ -43,15 +46,17 @@ builder.Services.AddVersionedOpenApi([
 builder.Services.AddControllers();
 
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("bookdb")));
-builder.EnrichNpgsqlDbContext<AppDbContext>();
+builder.Services.AddDbContext<AppDbContext>();
+builder.EnrichNpgsqlDbContext<AppDbContext>(s =>
+{
+    s.DisableHealthChecks = true;
+});
 
 builder.Services.AddDbContext<TenantDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("bookdb")));
 builder.EnrichNpgsqlDbContext<TenantDbContext>();
 
-builder.Services.AddScoped<ITenantService, TenantService>();
+builder.Services.AddScoped<ICurrentTenantService, CurrentTenantService>();
 
 builder.Services.AddAuthentication()
     .AddScheme<DummyAuthenticationSchemeOptions, DummyAuthenticationHandler>(
@@ -61,10 +66,6 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddAuthorization(options =>
 {
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    
     options.AddPolicy("User", policy => 
         policy
             .RequireAuthenticatedUser()
@@ -73,10 +74,8 @@ builder.Services.AddAuthorization(options =>
     
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
 });
-builder.Services.AddScoped<IAuthorizationHandler, TenantAccessAuthorizationRequirementHandler>();
 
-
-
+builder.ConfigureTenants();
 
 builder.Services.AddHangfire((sp,config) => 
     config.UsePostgreSqlStorage(c =>
@@ -94,13 +93,15 @@ builder.Services.AddOpenTelemetry()
 builder.AddBookModule();
 builder.AddUserModule();
 
+builder.Services.AddScoped<ITenantService, TenantService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     using (var scope = app.Services.CreateScope())
     {
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var dbContext = scope.ServiceProvider.GetRequiredService<TenantDbContext>();
         dbContext.Database.Migrate();
         
         var scheduler = scope.ServiceProvider.GetRequiredService<IBackgroundJobClient>();
@@ -130,7 +131,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapDefaultEndpoints();
-// app.MapControllers();
+app.MapControllers();
 
 // app.Map
 

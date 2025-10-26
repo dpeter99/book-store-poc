@@ -20,7 +20,7 @@ public class UserServiceIntegrationTests : IClassFixture<ApiServiceFixture>, IAs
 
 	public async Task InitializeAsync()
 	{
-		var tenantService = _scope.ServiceProvider.GetRequiredService<ITenantService>();
+		var tenantService = _scope.ServiceProvider.GetRequiredService<ICurrentTenantService>();
 		await tenantService.SetTenant(_fixture.tenantId);
 	}
 

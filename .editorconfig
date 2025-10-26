@@ -3,8 +3,8 @@ root = true
 [*]
 indent_style = tab
 insert_final_newline = true
-tab_width = 4
-indent_size = 4
+tab_width = 2
+indent_size = 2
 charset = utf-8
 
 
@@ -34,3 +34,4 @@ csharp_indent_labels = flush_left
 [*.json]
 
 tab_width = 2
+

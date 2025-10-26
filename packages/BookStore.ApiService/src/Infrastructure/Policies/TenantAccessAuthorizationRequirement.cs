@@ -10,7 +10,7 @@ public class TenantAccessAuthorizationRequirement
 {
 }
 
-public class TenantAccessAuthorizationRequirementHandler(ITenantService tenantService) : AuthorizationHandler<TenantAccessAuthorizationRequirement>
+public class TenantAccessAuthorizationRequirementHandler(ICurrentTenantService tenantService) : AuthorizationHandler<TenantAccessAuthorizationRequirement>
 {
     
     protected override Task HandleRequirementAsync(

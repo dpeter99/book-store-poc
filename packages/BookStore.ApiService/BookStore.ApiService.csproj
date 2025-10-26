@@ -41,7 +41,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="src\Database\Migrations\" />
+      <Folder Include="src\Database\App\Migrations\" />
+      <Folder Include="src\Database\Core\Migrations\" />
     </ItemGroup>
 
     <ItemGroup>
