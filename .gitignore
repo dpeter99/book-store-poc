@@ -3,3 +3,5 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 /.idea/.idea.BookStore/.idea/dataSources.xml
+
+node_modules

@@ -1,0 +1,6 @@
+<Project>
+	<Sdk Name="Microsoft.VisualStudio.JavaScript.SDK" Version="1.0.4068631" />
+	<ItemGroup>
+		<Script Include="tsconfig.json" />
+	</ItemGroup>
+</Project>

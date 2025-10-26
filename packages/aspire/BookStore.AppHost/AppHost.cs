@@ -17,4 +17,7 @@ var worker = builder.AddProject<Projects.BookStore_OptimizationRunner>("optimize
     .WithReplicas(2)
     .WithReference(bookdb);
 
+var frontend = builder.AddViteApp("frontend", workingDirectory: "../../BookStore.Frontend", packageManager: "pnpm");
+
+
 builder.Build().Run();
