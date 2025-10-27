@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "7.css": "^0.21.1",
+    "@tanstack/query-core": "^5.90.5",
+    "@tanstack/react-form": "^1.23.8",
     "@tanstack/react-query": "^5.90.5",
     "@tanstack/react-router": "^1.133.28",
     "@tanstack/react-router-devtools": "^1.133.28",
