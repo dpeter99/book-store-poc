@@ -12,7 +12,7 @@ namespace BookStore.ApiService.Modules.UserManager.Controllers;
 /// Internal API controller for user management
 /// </summary>
 [ApiController]
-[Route("api/v{version:apiVersion}/user", Name = "Users")]
+[Route("api/v{version:apiVersion}/user")]
 [ApiVersion("1")]
 [Authorize(Policy = "User")]
 public class UserController(IUserService userService) : Controller

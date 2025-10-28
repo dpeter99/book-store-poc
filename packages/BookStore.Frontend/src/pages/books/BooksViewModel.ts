@@ -1,31 +1,27 @@
-import {type Book, BooksService} from "../../services/BooksService.ts";
+import {type Book, BooksService} from "@/services/BooksService.ts";
 import type {ServicesT} from "../../App.tsx";
-import {createStore} from "zustand/vanilla";
+import {atom} from "jotai";
+import type {Store} from "jotai/vanilla/store";
 
 
 export class BooksViewModel {
-	private booksService: BooksService;
+	private readonly booksService: BooksService;
+	private readonly store: Store;
 
 
-	public books = createStore<{books: Book[]}>(()=>({
-		books: []
-	}));
+	public books = atom<Book[]>((get)=>{
+		return get(this.booksService.books);
+	});
 
 	constructor(cradle: ServicesT) {
 		this.booksService = cradle.booksService;
-
-		this.booksService.getBooks()
-			.then((books: Book[]) => {
-				this.books.setState({books: books});
-			});
+		this.store = cradle.store;
+		
+		this.books.debugLabel = "BooksVM Books";
 	}
 
 	public async addBook(name: string, releaseDate: string): Promise<void> {
 		await this.booksService.addBook(name, releaseDate);
-
-		// Refresh the books list
-		const books = await this.booksService.getBooks();
-		this.books.setState({books: books});
 	}
 
 }

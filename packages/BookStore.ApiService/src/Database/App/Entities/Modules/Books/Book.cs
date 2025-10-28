@@ -9,6 +9,7 @@ namespace BookStore.ApiService.Database.Entities.Modules.Books;
 
 [ValueObject<long>(conversions: Conversions.EfCoreValueConverter | Conversions.SystemTextJson)]
 [Instance("Unspecified", 0)]
+[BrandedType(nameof(BookId))]
 public readonly partial record struct BookId;
 
 [Index(nameof(TenantId))]

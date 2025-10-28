@@ -1,0 +1,15 @@
+html, body, * {
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+	cursor: pointer;
+}
+
+a:hover {
+	color: unset;
+	background-color: unset;
+	text-decoration: none;
+}

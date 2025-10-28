@@ -1,16 +1,19 @@
-import {createRootRoute, createRoute, createRouter} from "@tanstack/react-router";
+import {createRootRoute, createRoute, createRouter, Outlet} from "@tanstack/react-router";
 import { BooksPage } from "@/pages/books/Books.page";
+import {RootLayout} from "@/layout/rootLayout.tsx";
 
 
-const rootRoute = createRootRoute()
-
-const indexRoute = createRoute({
-	getParentRoute: () => rootRoute,
-	path: '/',
-	component: () => <p>asd</p>,
+const rootRoute = createRootRoute({
+	component: () => <RootLayout> <Outlet /> </RootLayout>,
 })
 
-const booksRoute = createRoute({
+export const indexRoute = createRoute({
+	getParentRoute: () => rootRoute,
+	path: '/',
+	component: () => <p>Hello World!</p>,
+})
+
+export const booksRoute = createRoute({
 	getParentRoute: () => rootRoute,
 	path: '/books',
 	component: () => <BooksPage/>,

@@ -4,6 +4,7 @@
   <Project Path="packages/BookStore.ApiService\BookStore.ApiService.csproj" Type="Classic C#" />
   <Project Path="packages\BookStore.ApiService.Tests\BookStore.ApiService.Tests.csproj" Type="Classic C#" />
   <Project Path="packages\BookStore.Frontend\BookStore.Frontend.esproj" Type="{54A90642-561A-4BB1-A94E-469ADEE60C69}" />
+	<Project Path="packages\BookStore.Frontend.ApiClient\BookStore.Frontend.ApiClient.esproj" Type="{54A90642-561A-4BB1-A94E-469ADEE60C69}" />
   <Project Path="packages\BookStore.JobContracts\BookStore.JobContracts.csproj" Type="Classic C#" />
   <Project Path="packages\BookStore.OptimizationRunner\BookStore.OptimizationRunner.csproj" Type="Classic C#" />
 </Solution>

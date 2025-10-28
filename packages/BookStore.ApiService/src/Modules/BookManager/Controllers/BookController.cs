@@ -10,7 +10,7 @@ using DomainBook = BookStore.ApiService.Modules.BookManager.Model.Book;
 namespace BookStore.ApiService.Modules.BookManager.Controllers;
 
 [ApiController]
-[Route("api/v{version:apiVersion}/book", Name = "Books")]
+[Route("api/v{version:apiVersion}/book")]
 [ApiVersion("1")]
 [Authorize(Policy = "User")]
 public class BookController(IBookService bookService) : Controller

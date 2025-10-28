@@ -1,0 +1,21 @@
+{
+  "name": "@book-store/frontend_api-client",
+  "private": true,
+	"type": "module",
+	"types": "src/*.d.ts",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gen": "cat ../BookStore.OpenApiSpec/BookStore.ApiService.json | ts-node generator.ts"
+  },
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0",
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "24.6.0",
+    "js-yaml": "^4.1.0",
+    "openapi-typescript": "^7.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "5.9.3"
+  }
+}

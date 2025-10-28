@@ -1,7 +1,7 @@
 import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 import {useVM} from "@/lib/helpers.ts";
 import type {BooksViewModel} from "./BooksViewModel.ts";
-import {useStore} from "zustand/react";
+import {useAtomValue} from "jotai";
 
 type Book = {
 	id: string
@@ -29,10 +29,10 @@ const columns = [
 export const BooksTable = () => {
 	const booksVM: BooksViewModel = useVM("booksPageViewModel") as BooksViewModel
 	
-	const books = useStore(booksVM.books)
+	const books = useAtomValue(booksVM.books)
 	
 	const table = useReactTable({
-		data: books.books,
+		data: books,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 	})

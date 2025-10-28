@@ -10,7 +10,7 @@
         "tags": [
           "User"
         ],
-        "operationId": "Users",
+        "operationId": "get-users",
         "responses": {
           "200": {
             "description": "OK",
@@ -47,7 +47,7 @@
         "tags": [
           "User"
         ],
-        "operationId": "Users",
+        "operationId": "create-user",
         "requestBody": {
           "content": {
             "application/json": {
@@ -371,7 +371,7 @@
         "tags": [
           "Book"
         ],
-        "operationId": "Books",
+        "operationId": "get-books",
         "responses": {
           "200": {
             "description": "OK",
@@ -408,7 +408,6 @@
         "tags": [
           "Book"
         ],
-        "operationId": "Books",
         "requestBody": {
           "content": {
             "application/json": {
@@ -482,7 +481,10 @@
   },
   "components": {
     "schemas": {
-      "AuthorId": { },
+      "AuthorId": {
+        "type": "integer",
+        "format": "int64"
+      },
       "BookDTO": {
         "required": [
           "title",
@@ -508,7 +510,10 @@
           }
         }
       },
-      "BookId": { },
+      "BookId": {
+        "type": "integer",
+        "format": "brand::BookId"
+      },
       "CreateBookDTO": {
         "required": [
           "title",
@@ -589,7 +594,10 @@
           }
         }
       },
-      "TenantId": { },
+      "TenantId": {
+        "type": "integer",
+        "format": "int64"
+      },
       "UpdateUserDTO": {
         "type": "object",
         "properties": {
@@ -629,7 +637,10 @@
           }
         }
       },
-      "UserId": { }
+      "UserId": {
+        "type": "integer",
+        "format": "int64"
+      }
     }
   },
   "tags": [

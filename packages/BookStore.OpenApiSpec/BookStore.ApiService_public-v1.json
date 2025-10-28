@@ -46,7 +46,10 @@
   },
   "components": {
     "schemas": {
-      "AuthorId": { },
+      "AuthorId": {
+        "type": "integer",
+        "format": "int64"
+      },
       "BookDTO": {
         "required": [
           "title",
@@ -72,7 +75,10 @@
           }
         }
       },
-      "BookId": { }
+      "BookId": {
+        "type": "integer",
+        "format": "brand::BookId"
+      }
     }
   },
   "tags": [
