@@ -7,7 +7,7 @@ import type {paths} from "@book-store/frontend_api-client/src/schema";
 import type { Client } from "openapi-fetch";
 
 export type Book = {
-	id?: string
+	id?: number
 	title: string
 	publishedDate?: string
 }
@@ -53,6 +53,7 @@ export class BooksService {
 				title: name,
 				publishedDate: releaseDate,
 				genre: "asd",
+				authorId: 1,
 			}
 		})
 

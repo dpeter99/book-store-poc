@@ -185,14 +185,14 @@ export interface components {
             publishedDate?: string;
             authorId?: components["schemas"]["AuthorId"];
         };
-        /** Format: brand::BookId */
-        BookId: Brand<integer, "BookId">;
+        /** Format: int64 */
+        BookId: number;
         CreateBookDTO: {
             title: string;
             genre: string;
             /** Format: date-time */
-            publishedDate?: string;
-            authorId?: components["schemas"]["AuthorId"];
+            publishedDate: string;
+            authorId: components["schemas"]["AuthorId"];
         };
         CreateTenantData: {
             name: string;

@@ -41,7 +41,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -89,7 +94,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       }
     },
     "/api/v1/user/{id}": {
@@ -150,7 +160,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -229,7 +244,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -271,7 +291,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       }
     },
     "/api/v1/user/by-username/{username}": {
@@ -331,7 +356,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       }
     },
     "/api/tenant": {
@@ -363,7 +393,12 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       }
     },
     "/api/v1/book": {
@@ -402,7 +437,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -432,7 +472,12 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       }
     },
     "/api/v1/book/{id}": {
@@ -475,7 +520,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       }
     }
   },
@@ -512,12 +562,14 @@
       },
       "BookId": {
         "type": "integer",
-        "format": "brand::BookId"
+        "format": "int64"
       },
       "CreateBookDTO": {
         "required": [
           "title",
-          "genre"
+          "genre",
+          "publishedDate",
+          "authorId"
         ],
         "type": "object",
         "properties": {
@@ -640,6 +692,13 @@
       "UserId": {
         "type": "integer",
         "format": "int64"
+      }
+    },
+    "securitySchemes": {
+      "DummyLogin": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Login"
       }
     }
   },

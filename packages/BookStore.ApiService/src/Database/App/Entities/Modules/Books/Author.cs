@@ -8,6 +8,7 @@ namespace BookStore.ApiService.Database.Entities.Modules.Books;
 
 [ValueObject<long>(conversions: Conversions.EfCoreValueConverter | Conversions.SystemTextJson)]
 [Instance("Unspecified", 0)]
+[BrandedType(nameof(AuthorId))]
 public readonly partial record struct AuthorId;
 
 public class Author

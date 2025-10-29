@@ -1,5 +1,6 @@
 using System.Reflection;
 using Asp.Versioning;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
 
 namespace BookStore.ApiService;
@@ -9,8 +10,8 @@ public static class OpenApiHostingExtension
 
 	public static IServiceCollection AddVersionedOpenApi(
 		this IServiceCollection services,
-		IEnumerable<(string group, ApiVersion version)> versions
-		)
+		IEnumerable<(string group, ApiVersion version)> versions,
+		Action<OpenApiOptions>? configure)
 	{
 		services
 			.AddApiVersioning()
@@ -29,7 +30,9 @@ public static class OpenApiHostingExtension
 			services.AddOpenApi(name,
 				options =>
 				{
-					options.AddBrandedTypes();
+					if(configure != null)
+						configure(options);
+					
 					options.AddDocumentTransformer((document, context, arg3) =>
 					{
 						document.Info.Version = versionStr;

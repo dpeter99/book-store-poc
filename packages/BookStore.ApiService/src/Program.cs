@@ -41,7 +41,12 @@ builder.Services.AddVersionedOpenApi([
 	("", new ApiVersion(1)),
 	("public", new ApiVersion(1)),
 	("public", new ApiVersion(2))
-]);
+], o =>
+{
+	o.AddAuth();
+	o.AddBrandedTypes();
+	o.MapVogenTypesInBookStore_ApiService();
+});
 
 builder.Services.AddControllers();
 

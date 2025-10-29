@@ -10,10 +10,18 @@ import { QueryClient } from "@tanstack/react-query";
 import {createStore, Provider} from "jotai";
 import type {Store} from "jotai/vanilla/store";
 import {DevTools} from "jotai-devtools";
-import createClient from "openapi-fetch";
+import createClient, {type Client, type Middleware} from "openapi-fetch";
 import type {paths} from "@book-store/frontend_api-client/src/schema";
 
-const apiClient = createClient<paths>({ baseUrl: "https://myapi.dev/v1/" });
+const authMiddleware: Middleware = {
+	async onRequest({ request }) {
+		// add Authorization header to every request
+		request.headers.set("Authorization", `admin_user:asd`);
+		return request;
+	},
+};
+
+
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -30,13 +38,14 @@ declare global {
 			import("@tanstack/query-core").QueryClient;
 	}
 }
-
 // This code is for all users
 window.__TANSTACK_QUERY_CLIENT__ = queryClient;
 
+
+
 export type ServicesT = {
 	store: Store
-	apiClient: typeof apiClient
+	apiClient: Client<paths>
 	booksService: BooksService
 	booksPageViewModel: BooksViewModel,
 	queryClient: QueryClient
@@ -45,6 +54,13 @@ export const Services = createContext<AwilixContainer<ServicesT>>(null!)
 
 function App() {
 	const store = createStore()
+
+	const loc = new URL(window.location.toString())
+	loc.host = "test."+loc.host
+	loc.pathname = "/api/";
+	
+	const apiClient = createClient<paths>({ baseUrl: loc.toString() });
+	apiClient.use(authMiddleware);
 	
 	const container = createContainer<ServicesT>({})
 	container.register({

@@ -33,23 +33,10 @@ public class BrandedTypeSchemaTransformer : IOpenApiSchemaTransformer
 	}
 }
 
-public class VogenTypeSchemaTransformer : IOpenApiSchemaTransformer
-{
-	public Task TransformAsync(OpenApiSchema schema, OpenApiSchemaTransformerContext context, CancellationToken cancellationToken)
-	{
-		var customAttributeProvider = context.JsonPropertyInfo?.PropertyType.GetCustomAttribute<ValueObjectAttribute>();
-		if(customAttributeProvider != null)
-			Console.WriteLine($"Property: {context.JsonPropertyInfo?.Name}");
-		
-		return Task.CompletedTask;
-	}
-}
-
 public static class BrandedTypeAttributeExtensions
 {
 	public static OpenApiOptions AddBrandedTypes(this OpenApiOptions options)
 	{
-		options.MapVogenTypesInBookStore_ApiService();
 		options.AddSchemaTransformer<BrandedTypeSchemaTransformer>();
 		return options;
 	}

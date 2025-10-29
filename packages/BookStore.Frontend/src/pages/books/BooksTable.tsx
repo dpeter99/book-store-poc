@@ -2,12 +2,8 @@ import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@t
 import {useVM} from "@/lib/helpers.ts";
 import type {BooksViewModel} from "./BooksViewModel.ts";
 import {useAtomValue} from "jotai";
+import type {Book} from "@/services/BooksService.ts";
 
-type Book = {
-	id: string
-	name: string
-	releaseDate: string
-}
 
 const columnHelper = createColumnHelper<Book>()
 
@@ -16,11 +12,11 @@ const columns = [
 		header: 'ID',
 		footer: info => info.column.id,
 	}),
-	columnHelper.accessor('name', {
+	columnHelper.accessor('title', {
 		header: 'Name',
 		footer: info => info.column.id,
 	}),
-	columnHelper.accessor('releaseDate', {
+	columnHelper.accessor('publishedDate', {
 		header: 'Release Data',
 		footer: info => info.column.id,
 	}),

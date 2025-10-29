@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using BookStore.ApiService.Database.Entities;
 using BookStore.ApiService.Database.Entities.Modules.Books;
 using Riok.Mapperly.Abstractions;
@@ -9,7 +10,9 @@ public partial class CreateBookDTO
 {
     public required string Title { get; set; }
     public required string Genre { get; set; }
+    [Required]
     public DateTime PublishedDate { get; set; }
+    [Required]
     public AuthorId AuthorId { get; set; }
 
 	[Mapper]
@@ -21,22 +24,5 @@ public partial class CreateBookDTO
 		/// </summary>
 		[MapperIgnoreTarget(nameof(DomainBook.Id))]
 		public static partial DomainBook ToModel(CreateBookDTO dto);
-
-		/// <summary>
-		/// Maps CreateBookDTO to Book entity with TenantId
-		/// Manual mapper to handle required properties
-		/// </summary>
-		public static Book ToEntity(CreateBookDTO dto, TenantId tenantId)
-		{
-			return new()
-			{
-				Id = BookId.Unspecified,
-				Title = dto.Title,
-				Genre = dto.Genre,
-				PublishedDate = dto.PublishedDate,
-				AuthorId = dto.AuthorId,
-				TenantId = tenantId
-			};
-		}
 	}
 }

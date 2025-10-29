@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <PackageJsonName Condition="$(PackageJsonName) == ''">@book-store/frontend_api-client</PackageJsonName>
+    <PackageJsonPrivate Condition="$(PackageJsonPrivate) == ''">true</PackageJsonPrivate>
+    <PackageJsonType Condition="$(PackageJsonType) == ''">module</PackageJsonType>
+    <PackageJsonTypes Condition="$(PackageJsonTypes) == ''">src/*.d.ts</PackageJsonTypes>
+    <PackageJsonVersion Condition="$(PackageJsonVersion) == ''">1.0.0</PackageJsonVersion>
+    <PackageJsonDescription Condition="$(PackageJsonDescription) == ''"></PackageJsonDescription>
+    <PackageJsonScriptsTest Condition="$(PackageJsonScriptsTest) == ''">echo "Error: no test specified" &amp;&amp; exit 1</PackageJsonScriptsTest>
+    <PackageJsonScriptsGen Condition="$(PackageJsonScriptsGen) == ''">cat ../BookStore.OpenApiSpec/BookStore.ApiService.json | ts-node generator.ts</PackageJsonScriptsGen>
+    <PackageJsonPackagemanager Condition="$(PackageJsonPackagemanager) == ''">pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0</PackageJsonPackagemanager>
+    <PackageJsonDevdependenciesTypesJsYaml Condition="$(PackageJsonDevdependenciesTypesJsYaml) == ''">^4.0.9</PackageJsonDevdependenciesTypesJsYaml>
+    <PackageJsonDevdependenciesTypesNode Condition="$(PackageJsonDevdependenciesTypesNode) == ''">24.6.0</PackageJsonDevdependenciesTypesNode>
+    <PackageJsonDevdependenciesJsYaml Condition="$(PackageJsonDevdependenciesJsYaml) == ''">^4.1.0</PackageJsonDevdependenciesJsYaml>
+    <PackageJsonDevdependenciesOpenapiTypescript Condition="$(PackageJsonDevdependenciesOpenapiTypescript) == ''">^7.10.1</PackageJsonDevdependenciesOpenapiTypescript>
+    <PackageJsonDevdependenciesTsNode Condition="$(PackageJsonDevdependenciesTsNode) == ''">^10.9.2</PackageJsonDevdependenciesTsNode>
+    <PackageJsonDevdependenciesTypescript Condition="$(PackageJsonDevdependenciesTypescript) == ''">5.9.3</PackageJsonDevdependenciesTypescript>
+  </PropertyGroup>
+</Project>

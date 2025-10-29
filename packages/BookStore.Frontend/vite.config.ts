@@ -16,4 +16,16 @@ export default defineConfig({
 			'@': path.resolve(__dirname, './src'),
 		},
 	},
+	server: {
+		host: true,
+		port: parseInt(process.env.PORT ?? "5173"),
+		proxy: {
+			'/api': {
+				target: (process.env.services__apiservice__https__0 || process.env.services__apiservice__http__0).replace('localhost', 'test.localhost'),
+				changeOrigin: true,
+				rewrite: path => path.replace(/^\/api/, ''),
+				secure: false
+			}
+		}
+	}
 })

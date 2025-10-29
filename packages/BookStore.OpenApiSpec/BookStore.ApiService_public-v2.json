@@ -40,7 +40,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       }
     },
     "/public-api/v2/book/{id}": {
@@ -100,7 +105,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       }
     }
   },
@@ -137,7 +147,7 @@
       },
       "BookId": {
         "type": "integer",
-        "format": "brand::BookId"
+        "format": "int64"
       },
       "ProblemDetails": {
         "type": "object",
@@ -164,6 +174,13 @@
             "nullable": true
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "DummyLogin": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Login"
       }
     }
   },

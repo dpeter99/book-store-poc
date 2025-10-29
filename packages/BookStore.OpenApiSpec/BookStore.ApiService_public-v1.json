@@ -40,7 +40,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "DummyLogin": [ ]
+          }
+        ]
       }
     }
   },
@@ -77,7 +82,14 @@
       },
       "BookId": {
         "type": "integer",
-        "format": "brand::BookId"
+        "format": "int64"
+      }
+    },
+    "securitySchemes": {
+      "DummyLogin": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Login"
       }
     }
   },

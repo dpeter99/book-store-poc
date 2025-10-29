@@ -54,14 +54,14 @@ public class BookService(AppDbContext dbContext, ICurrentTenantService tenantSer
 
     public async Task AddBook(DomainBook book)
     {
-
+	    
         // Logic to add book to the database
         dbContext.Books.Add(new DbBook()
         {
             Id = book.Id,
             Title = book.Title,
             Genre = book.Genre,
-            PublishedDate = book.PublishedDate,
+            PublishedDate = book.PublishedDate.ToUniversalTime(),
             AuthorId = book.AuthorId,
             TenantId = tenantService.CurrentTenantId ?? TenantId.Unspecified //TODO figure out a better way to do this
         });
